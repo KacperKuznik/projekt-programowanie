@@ -7,7 +7,7 @@ int main()
     //Fragment kodu do testu dzia³ania SFML
     sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
     sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Blue);
+    shape.setFillColor(sf::Color::Yellow);
 
     while (window.isOpen())
     {
