@@ -8,7 +8,11 @@ using namespace std;
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
+    int width = 1200;
+    int height = 800;
+    int grid_width = 500;
+    float tile_width = grid_width/10;
+    sf::RenderWindow window(sf::VideoMode(width, height), "My window");
     while (window.isOpen())
     {
         sf::Event event;
@@ -19,7 +23,8 @@ int main()
         }
         window.clear(sf::Color::White);
 
-        Grid grid(window);
+        Grid my_grid(window, grid_width, 0, 50);
+        Grid enemy_grid(window, grid_width, grid_width + grid_width/10,50);
 
         window.display();
     }
