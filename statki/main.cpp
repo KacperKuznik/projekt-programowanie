@@ -36,8 +36,11 @@ int main()
             {
                 if (event.mouseButton.button == sf::Mouse::Left)
                 {
-                    std::cout << "Tile: " << column_labels[event.mouseButton.x / tile_width] << event.mouseButton.y / tile_width + 1 << endl;
-                    my_grid.getTiles()[event.mouseButton.x / tile_width][event.mouseButton.y / tile_width].setFillColor(sf::Color::Blue);
+                    
+                    int row = event.mouseButton.x / tile_width;
+                    int col = event.mouseButton.y / tile_width;
+                    std::cout << "Tile: " << column_labels[row] << col + 1 << endl;
+                    my_grid.click(row, col);
                 }
             }
         }

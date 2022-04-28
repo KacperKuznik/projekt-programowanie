@@ -38,4 +38,7 @@ public:
 			}
 		}
 	}
+	void click(int row, int col) {
+		tiles[row][col].setFillColor(sf::Color::Red);
+	}
 };
