@@ -54,9 +54,9 @@ public:
                         sf::Vector2f mouse(sf::Mouse::getPosition(window));
 
 
-                        int row = (event.mouseButton.x - x) / tile_width;
-                        int col = (event.mouseButton.y - y) / tile_width;
-                        std::cout << "Tile: " << column_labels[row] << col + 1 << endl;
+                        //int row = (event.mouseButton.x - pos_x) / tile_width;
+                        //int col = (event.mouseButton.y - pos_y) / tile_width;
+                        //std::cout << "Tile: " << column_labels[row] << col + 1 << endl;
                         my_grid.click(mouse, network);
                         //network.send(row, col);
 

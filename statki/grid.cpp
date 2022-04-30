@@ -3,6 +3,7 @@
 #include "tile.cpp"
 #include <iostream>
 #include "Network.cpp"
+
 class Grid
 {
 private:
@@ -19,11 +20,9 @@ public:
 			tiles[row] = new sf::RectangleShape[cols];
 
 			for (int col = 0; col < cols; col++) {
-				sf::RectangleShape tile(sf::Vector2f(tile_width, tile_width));
+				Tile tile_obj(tile_width);
+				sf::RectangleShape tile = tile_obj.getTile();
 				tile.setPosition(x + tile_width *row, y + tile_width *col);
-				tile.setFillColor(sf::Color(240, 240, 240));
-				tile.setOutlineThickness(2.f);
-				tile.setOutlineColor(sf::Color(0, 0, 0));
 				tiles[row][col] = tile;
 				
 			}
