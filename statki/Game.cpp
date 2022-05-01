@@ -2,7 +2,8 @@
 #include <iostream>
 #include "Grid.cpp"
 #include "Network.cpp"
-
+#include "tile.cpp"
+#include "ship.cpp"
 class Game
 {
 private:
@@ -26,13 +27,16 @@ public:
                 //for (int i = 0; i < 10; i++) {
         //    column_labels[i] = (char)i + 97;
         //}
-
+        //createShips();
         cin >> port;
         network.set_reciever_port(port);
+        //Tile tile(50);
+
 
         sf::RenderWindow window(sf::VideoMode(width, height), "statki");
 
         Grid my_grid(grid_width, pos_x, pos_y);
+        Ship ship1(3, 0, 700);
         while (window.isOpen())
         {
             auto result = network.listen();
@@ -66,11 +70,20 @@ public:
 
             window.clear(sf::Color::White);
             my_grid.drawGrid(window);
-
+            ship1.drawShip(window);
             //Grid enemy_grid(window, grid_width, grid_width + grid_width/10,0);
-
 
             window.display();
         }
     }
+    /*void createShips() {
+        int n = 4;
+        for (int i = 1; i <= 4; i++) {
+            for (int j = 0; j < n; j++) {
+                std::cout << i;
+
+            }
+            n--;
+        }
+    }*/
 };

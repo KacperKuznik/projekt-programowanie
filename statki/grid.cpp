@@ -21,7 +21,7 @@ public:
 
 			for (int col = 0; col < cols; col++) {
 				Tile tile_obj(tile_width);
-				sf::RectangleShape tile = tile_obj.getTile();
+				sf::RectangleShape tile = tile_obj.createTile();
 				tile.setPosition(x + tile_width *row, y + tile_width *col);
 				tiles[row][col] = tile;
 				
@@ -38,6 +38,7 @@ public:
 				window.draw(tiles[row][col]);
 			}
 		}
+
 	}
 	void click(sf::Vector2f mouse, Network& network) {
 		
