@@ -4,11 +4,14 @@
 #include "Network.cpp"
 #include "tile.cpp"
 #include "ship.cpp"
+#include "PlayerGrid.cpp"
+#include "EnemyGrid.cpp"
+#include <vector>
 class Game
 {
 private:
-    int width = 1920;
-    int height = 1080;
+    int width = 1600;
+    int height = 900;
     int grid_width = 500;
     int tile_width = grid_width / 10;
     char column_labels[10];
@@ -21,28 +24,32 @@ private:
     unsigned short port;
     Network network;
 
+    std::vector< Ship > ships;
+
 public:
 
     void run() {
                 //for (int i = 0; i < 10; i++) {
         //    column_labels[i] = (char)i + 97;
         //}
-        //createShips();
+        createShips();
         cin >> port;
         network.set_reciever_port(port);
         //Tile tile(50);
 
 
         sf::RenderWindow window(sf::VideoMode(width, height), "statki");
+        PlayerGrid player_grid(grid_width, pos_x, pos_y);
 
-        Grid my_grid(grid_width, pos_x, pos_y);
-        Ship ship1(3, 0, 700);
+        //Grid my_grid(grid_width, pos_x, pos_y);
+        EnemyGrid enemy_grid(grid_width, pos_x + grid_width+3* tile_width, pos_y);
         while (window.isOpen())
         {
             auto result = network.listen();
             if (result.status == 0) {
                 result.packet >> row >> col;
-                my_grid.getTiles()[row][col].setFillColor(sf::Color::Blue);
+                player_grid.mark(row, col);
+                    
             }
 
             sf::Event event;
@@ -61,7 +68,7 @@ public:
                         //int row = (event.mouseButton.x - pos_x) / tile_width;
                         //int col = (event.mouseButton.y - pos_y) / tile_width;
                         //std::cout << "Tile: " << column_labels[row] << col + 1 << endl;
-                        my_grid.click(mouse, network);
+                        enemy_grid.shoot(mouse, network);
                         //network.send(row, col);
 
                     }
@@ -69,21 +76,23 @@ public:
             }
 
             window.clear(sf::Color::White);
-            my_grid.drawGrid(window);
-            ship1.drawShip(window);
+            player_grid.drawGrid(window);
+            enemy_grid.drawGrid(window);
+            for (Ship ship : ships)
+                ship.drawShip(window);
             //Grid enemy_grid(window, grid_width, grid_width + grid_width/10,0);
 
             window.display();
         }
     }
-    /*void createShips() {
+    void createShips() {
         int n = 4;
         for (int i = 1; i <= 4; i++) {
             for (int j = 0; j < n; j++) {
-                std::cout << i;
-
+                Ship ship(i, pos_x + tile_width*(i+1)*j, pos_y + grid_width + tile_width*i +tile_width*(i-1)/2);
+                ships.push_back(ship);
             }
             n--;
         }
-    }*/
+    }
 };
