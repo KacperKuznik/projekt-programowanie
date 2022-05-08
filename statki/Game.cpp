@@ -20,6 +20,8 @@ private:
     int pos_y = 10;
     int row, col;
 
+    int selShip = -1;
+    bool shipIsSelected = false;
 
     unsigned short port;
     Network network;
@@ -36,9 +38,7 @@ public:
         cin >> port;
         network.set_reciever_port(port);
         //Tile tile(50);
-        ships[1].chColor(sf::Color::Yellow);
-        std::cout << ships[9].size();
-        
+
 
         sf::RenderWindow window(sf::VideoMode(width, height), "statki");
         PlayerGrid player_grid(grid_width, pos_x, pos_y);
@@ -53,7 +53,7 @@ public:
                 player_grid.mark(row, col);
                     
             }
-            
+
             sf::Event event;
             while (window.pollEvent(event))
             {
@@ -65,7 +65,16 @@ public:
                     if (event.mouseButton.button == sf::Mouse::Left)
                     {
                         sf::Vector2f mouse(sf::Mouse::getPosition(window));
-                        shipSel(mouse);
+
+                        bool shipIsSelected = selShip != -1;
+                        if (shipIsSelected == false) {
+                            selShip = shipSel(mouse);
+                        }
+                        else {
+                            shipMove(mouse, selShip);
+                            selShip = -1;
+                        }
+                        
 
                         //int row = (event.mouseButton.x - pos_x) / tile_width;
                         //int col = (event.mouseButton.y - pos_y) / tile_width;
@@ -80,11 +89,10 @@ public:
             window.clear(sf::Color::White);
             player_grid.drawGrid(window);
             enemy_grid.drawGrid(window);
-            
             for (Ship ship : ships)
                 ship.drawShip(window);
             //Grid enemy_grid(window, grid_width, grid_width + grid_width/10,0);
-            
+
             window.display();
         }
     }
@@ -97,18 +105,26 @@ public:
             }
             n--;
         }
+
         std::cout << ships.size();
     }
 
-    void shipSel(sf::Vector2f mouse) {
+    int shipSel(sf::Vector2f mouse) {
         std::cout << "\n" << "Klikniecie" << "\n";
         for (int i = 0; i < ships.size(); i++) {
             for (int j = 0; j < ships[i].size(); j++) {
                 if (ships[i].getTile(j).getGlobalBounds().contains(mouse)) {
                     ships[i].chColor(sf::Color::Yellow);
-                    break;
+                    std::cout << "Zwrot" << std::endl;
+                    return i;
                 }
             }
         }
+        return -1;
+    }
+
+    void shipMove(sf::Vector2f mouse, int selShip) {
+        ships[selShip].setPos(mouse);
+        ships[selShip].chColor(sf::Color::Blue);
     }
 };

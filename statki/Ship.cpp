@@ -1,7 +1,6 @@
 #pragma once
 #include "tile.cpp"
 #include <iostream>
-#include <vector>
 
 class Ship
 {
@@ -44,6 +43,13 @@ public:
 
 	int size() {
 		return length;
+	}
+
+
+	void setPos(sf::Vector2f position) {
+		for (int i = 0; i < length; i++) {
+			ship_tiles[i].setPosition(position.x + tile_width * i,position.y);
+		}
 	}
 
 };
