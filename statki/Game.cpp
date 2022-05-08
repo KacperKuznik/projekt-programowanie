@@ -31,29 +31,27 @@ private:
 public:
 
     void run() {
-                //for (int i = 0; i < 10; i++) {
-        //    column_labels[i] = (char)i + 97;
-        //}
+        //for (int i = 0; i < 10; i++) {
+//    column_labels[i] = (char)i + 97;
+//}
         createShips();
         cin >> port;
         network.set_reciever_port(port);
         //Tile tile(50);
-        ships[1].chColor(sf::Color::Yellow);
-        std::cout << ships[9].size();
- 
+
 
         sf::RenderWindow window(sf::VideoMode(width, height), "statki");
         PlayerGrid player_grid(grid_width, pos_x, pos_y);
 
         //Grid my_grid(grid_width, pos_x, pos_y);
-        EnemyGrid enemy_grid(grid_width, pos_x + grid_width+3* tile_width, pos_y);
+        EnemyGrid enemy_grid(grid_width, pos_x + grid_width + 3 * tile_width, pos_y);
         while (window.isOpen())
         {
             auto result = network.listen();
             if (result.status == 0) {
                 result.packet >> row >> col;
                 player_grid.mark(row, col);
-                    
+
             }
 
             sf::Event event;
@@ -67,7 +65,16 @@ public:
                     if (event.mouseButton.button == sf::Mouse::Left)
                     {
                         sf::Vector2f mouse(sf::Mouse::getPosition(window));
-                        shipSel(mouse);
+
+                        bool shipIsSelected = selShip != -1;
+                        if (shipIsSelected == false) {
+                            selShip = shipSel(mouse);
+                        }
+                        else {
+                            shipMove(mouse, selShip);
+                            selShip = -1;
+                        }
+
 
                         //int row = (event.mouseButton.x - pos_x) / tile_width;
                         //int col = (event.mouseButton.y - pos_y) / tile_width;
@@ -93,22 +100,31 @@ public:
         int n = 4;
         for (int i = 1; i <= 4; i++) {
             for (int j = 0; j < n; j++) {
-                Ship ship(i, pos_x + tile_width*(i+1)*j, pos_y + grid_width + tile_width*i +tile_width*(i-1)/2);
+                Ship ship(i, pos_x + tile_width * (i + 1) * j, pos_y + grid_width + tile_width * i + tile_width * (i - 1) / 2);
                 ships.push_back(ship);
             }
             n--;
         }
+
         std::cout << ships.size();
     }
-    void shipSel(sf::Vector2f mouse) {
+
+    int shipSel(sf::Vector2f mouse) {
         std::cout << "\n" << "Klikniecie" << "\n";
         for (int i = 0; i < ships.size(); i++) {
             for (int j = 0; j < ships[i].size(); j++) {
                 if (ships[i].getTile(j).getGlobalBounds().contains(mouse)) {
                     ships[i].chColor(sf::Color::Yellow);
-                    break;
+                    std::cout << "Zwrot" << std::endl;
+                    return i;
                 }
             }
         }
+        return -1;
+    }
+
+    void shipMove(sf::Vector2f mouse, int selShip) {
+        ships[selShip].setPos(mouse);
+        ships[selShip].chColor(sf::Color::Blue);
     }
 };
