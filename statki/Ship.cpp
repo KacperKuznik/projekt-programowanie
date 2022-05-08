@@ -1,6 +1,7 @@
 #pragma once
 #include "tile.cpp"
 #include <iostream>
+#include <vector>
 
 class Ship
 {
@@ -30,4 +31,19 @@ public:
 	
 		}
 	}
+
+	sf::RectangleShape getTile(int i) {
+		return ship_tiles[i];
+	}
+
+	void chColor(sf::Color color) {
+		for (int i = 0; i < length; i++) {
+			ship_tiles[i].setFillColor(color);
+		}
+	}
+
+	int size() {
+		return length;
+	}
+
 };
