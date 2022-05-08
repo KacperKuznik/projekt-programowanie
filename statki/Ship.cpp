@@ -5,7 +5,7 @@
 class Ship
 {
 private:
-	short int length = 1;
+	short int length  = 1;
 	int tile_width = 50;
 	sf::RectangleShape* ship_tiles;
 public:
@@ -22,12 +22,12 @@ public:
 
 	}
 	void drawShip(sf::RenderWindow& window) {
-
+		
 
 		for (int i = 0; i < length; i++) {
 
-			window.draw(ship_tiles[i]);
-
+		window.draw(ship_tiles[i]);
+	
 		}
 	}
 
@@ -48,7 +48,7 @@ public:
 
 	void setPos(sf::Vector2f position) {
 		for (int i = 0; i < length; i++) {
-			ship_tiles[i].setPosition(position.x + tile_width * i, position.y);
+			ship_tiles[i].setPosition(position.x + tile_width * i,position.y);
 		}
 	}
 

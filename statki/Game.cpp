@@ -31,9 +31,9 @@ private:
 public:
 
     void run() {
-        //for (int i = 0; i < 10; i++) {
-//    column_labels[i] = (char)i + 97;
-//}
+                //for (int i = 0; i < 10; i++) {
+        //    column_labels[i] = (char)i + 97;
+        //}
         createShips();
         cin >> port;
         network.set_reciever_port(port);
@@ -44,14 +44,14 @@ public:
         PlayerGrid player_grid(grid_width, pos_x, pos_y);
 
         //Grid my_grid(grid_width, pos_x, pos_y);
-        EnemyGrid enemy_grid(grid_width, pos_x + grid_width + 3 * tile_width, pos_y);
+        EnemyGrid enemy_grid(grid_width, pos_x + grid_width+3* tile_width, pos_y);
         while (window.isOpen())
         {
             auto result = network.listen();
             if (result.status == 0) {
                 result.packet >> row >> col;
                 player_grid.mark(row, col);
-
+                    
             }
 
             sf::Event event;
@@ -74,7 +74,7 @@ public:
                             shipMove(mouse, selShip);
                             selShip = -1;
                         }
-
+                        
 
                         //int row = (event.mouseButton.x - pos_x) / tile_width;
                         //int col = (event.mouseButton.y - pos_y) / tile_width;
@@ -100,7 +100,7 @@ public:
         int n = 4;
         for (int i = 1; i <= 4; i++) {
             for (int j = 0; j < n; j++) {
-                Ship ship(i, pos_x + tile_width * (i + 1) * j, pos_y + grid_width + tile_width * i + tile_width * (i - 1) / 2);
+                Ship ship(i, pos_x + tile_width*(i+1)*j, pos_y + grid_width + tile_width*i +tile_width*(i-1)/2);
                 ships.push_back(ship);
             }
             n--;
