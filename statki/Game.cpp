@@ -39,10 +39,9 @@ public:
         network.set_reciever_port(port);
         //Tile tile(50);
 
-
+        
         sf::RenderWindow window(sf::VideoMode(width, height), "statki");
         PlayerGrid player_grid(grid_width, pos_x, pos_y);
-
         //Grid my_grid(grid_width, pos_x, pos_y);
         EnemyGrid enemy_grid(grid_width, pos_x + grid_width+3* tile_width, pos_y);
         while (window.isOpen())
@@ -71,11 +70,10 @@ public:
                             selShip = shipSel(mouse);
                         }
                         else {
-                            shipMove(mouse, selShip);
+                            shipMove(mouse, selShip, player_grid);
                             selShip = -1;
                         }
                         
-
                         //int row = (event.mouseButton.x - pos_x) / tile_width;
                         //int col = (event.mouseButton.y - pos_y) / tile_width;
                         //std::cout << "Tile: " << column_labels[row] << col + 1 << endl;
@@ -123,8 +121,8 @@ public:
         return -1;
     }
 
-    void shipMove(sf::Vector2f mouse, int selShip) {
-        ships[selShip].setPos(mouse);
+    void shipMove(sf::Vector2f mouse, int selShip, PlayerGrid player_grid) {
+        player_grid.placeShip(ships[selShip], mouse);
         ships[selShip].chColor(sf::Color::Blue);
     }
 };

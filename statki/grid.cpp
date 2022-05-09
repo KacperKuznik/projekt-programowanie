@@ -9,7 +9,11 @@ class Grid
 private:
 	int rows = 10;
 	int cols = 10;
-
+	struct Position
+	{
+		int row = -1;
+		int col = -1;
+	};
 protected:
 	sf::RectangleShape** tiles;
 
@@ -42,6 +46,17 @@ public:
 			}
 		}
 
+	}
+	auto getClickedPosition(sf::Vector2f mouse) {
+
+		struct Position pos;
+		for (int row = 0; row < 10; row++)
+			for (int col = 0; col < 10; col++)
+				if (tiles[row][col].getGlobalBounds().contains(mouse)) {
+					pos.row = row;
+					pos.col = col;
+					return pos;
+				}
 	}
 
 
