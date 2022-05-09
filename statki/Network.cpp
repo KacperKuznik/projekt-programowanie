@@ -31,7 +31,15 @@ public:
         receiver_port = _receiver_port;
     }
     void send(int row, int col) {
+        packet.clear();
         packet << row << col;
+        socket.send(packet, "127.0.0.1", receiver_port);
+    }
+    void reply(bool isHit) {
+        packet.clear();
+        packet << isHit;
+
+        std::cout << "send reply" << isHit;
         socket.send(packet, "127.0.0.1", receiver_port);
     }
 };

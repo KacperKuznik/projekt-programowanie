@@ -9,6 +9,7 @@ class Grid
 private:
 	int rows = 10;
 	int cols = 10;
+
 	struct Position
 	{
 		int row = -1;
@@ -18,7 +19,8 @@ protected:
 	sf::RectangleShape** tiles;
 
 public:
-
+	sf::Color tile_color = sf::Color(240, 240, 240);
+	sf::Color missed_shot_color = sf::Color(200, 200, 200);
 	Grid( int width, int x, int y) {
 		int tile_width = width / rows;
 		tiles = new sf::RectangleShape * [rows];
@@ -27,7 +29,7 @@ public:
 			tiles[row] = new sf::RectangleShape[cols];
 
 			for (int col = 0; col < cols; col++) {
-				Tile tile_obj(tile_width, sf::Color(240, 240, 240));
+				Tile tile_obj(tile_width, tile_color);
 				sf::RectangleShape tile = tile_obj.createTile();
 				tile.setPosition(x + tile_width *row, y + tile_width *col);
 				tiles[row][col] = tile;

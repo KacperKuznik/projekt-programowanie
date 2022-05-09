@@ -40,6 +40,9 @@ public:
 			ship_tiles[i].setFillColor(color);
 		}
 	}
+	void hit(int i) {
+		ship_tiles[i].setFillColor(sf::Color::Red);
+	}
 
 	int size() {
 		return length;

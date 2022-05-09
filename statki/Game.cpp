@@ -10,13 +10,13 @@
 class Game
 {
 private:
-    int width = 1600;
+    int width = 1200;
     int height = 900;
     int grid_width = 500;
     int tile_width = grid_width / 10;
     char column_labels[10];
 
-    int pos_x = 200;
+    int pos_x = 25;
     int pos_y = 10;
     int row, col;
 
@@ -49,7 +49,7 @@ public:
             auto result = network.listen();
             if (result.status == 0) {
                 result.packet >> row >> col;
-                player_grid.mark(row, col);
+                player_grid.mark(row, col, ships, network);
                     
             }
 
@@ -73,7 +73,7 @@ public:
                             shipMove(mouse, selShip, player_grid);
                             selShip = -1;
                         }
-                        
+                     
                         //int row = (event.mouseButton.x - pos_x) / tile_width;
                         //int col = (event.mouseButton.y - pos_y) / tile_width;
                         //std::cout << "Tile: " << column_labels[row] << col + 1 << endl;
