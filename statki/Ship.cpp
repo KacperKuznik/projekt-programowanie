@@ -8,7 +8,6 @@ private:
 	short int length  = 1;
 	int tile_width = 50;
 
-	sf::RectangleShape* ship_tiles;
 	bool rotation = 0;
 
 	Tile* ship_tiles;
