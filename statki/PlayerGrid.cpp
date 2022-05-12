@@ -56,14 +56,13 @@ public:
 	}
 
 	bool canBeRotated(Ship ship) {
-		auto pos = getClickedPosition(ship.getTile(0).getPosition());
+		auto pos = getClickedPosition(ship.getTile(0).getCenter());
 		int size = ship.size();
 		bool rotation = ship.getRot();
 
-		std::cout << std::endl << "Row: " << pos.row << " Col: " << pos.col << " Size: " << size << " Rotation: " << rotation;
 		
 		if (rotation == 0) {
-			if (pos.row + size > 10) {
+			if (pos.col + size > 10) {
 				return EXIT_FAILURE;
 			}
 			else {
@@ -72,7 +71,7 @@ public:
 		}
 		else
 		{
-			if (pos.col + size > 10) {
+			if (pos.row + size > 10) {
 				return EXIT_FAILURE;
 			}
 			else {

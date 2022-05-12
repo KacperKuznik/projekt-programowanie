@@ -64,23 +64,28 @@ public:
 		}
 	}
 
-	void chRot() {
+	int chRot() {
 		sf::Vector2f position = ship_tiles[0].getPosition();
 		if (rotation == 0) {
 			for (int i = 0; i < length; i++) {
 				ship_tiles[i].setPosition(position.x, position.y + tile_width * i);
 			}
-			rotation = 1;
+			return 1;
+			
 		}
 		else {
 			for (int i = 0; i < length; i++) {
 				ship_tiles[i].setPosition(position.x + tile_width * i, position.y);
 			}
-			rotation = 0;
+			return 0;
 		}
 	}
 
 	bool getRot() {
 		return rotation;
+	}
+
+	void setRot(bool _rotation) {
+		rotation = _rotation;
 	}
 };

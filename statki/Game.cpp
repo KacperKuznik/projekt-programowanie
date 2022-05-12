@@ -83,7 +83,8 @@ public:
                     }
                     else if (event.mouseButton.button == sf::Mouse::Right) {
                         if (shipIsSelected == true) {
-                            shipRotate(ships[selShip], player_grid);
+                            //shipRotate(ships[selShip], player_grid);
+                            ships[selShip].setRot(shipRotate(ships[selShip], player_grid));
                         }
                     }
                 }
@@ -109,16 +110,13 @@ public:
             n--;
         }
 
-        std::cout << ships.size();
     }
 
     int shipSel(sf::Vector2f mouse) {
-        std::cout << "\n" << "Klikniecie" << "\n";
         for (int i = 0; i < ships.size(); i++) {
             for (int j = 0; j < ships[i].size(); j++) {
                 if (ships[i].getTile(j).getGlobalBounds().contains(mouse)) {
                     ships[i].chColor(sf::Color::Yellow);
-                    std::cout << "Zwrot" << std::endl;
                     return i;
                 }
             }
@@ -131,12 +129,13 @@ public:
         ships[selShip].chColor(sf::Color::Blue);
     }
 
-    void shipRotate(Ship ship, PlayerGrid player_grid) {
+    bool shipRotate(Ship ship, PlayerGrid player_grid) {
         if (player_grid.canBeRotated(ship) == 0) {
-            ship.chRot();
+            return ship.chRot();
         }
         else {
-            std::cout << std::endl << "Nosz kurwa co ty robisz?";
+            return ship.getRot();
+            
         }
 
     }
