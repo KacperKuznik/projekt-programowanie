@@ -33,17 +33,12 @@ public:
 			}
 		}
 	}
-	bool isHit(int row, int col, sf::RectangleShape tile) {
-		sf::FloatRect tile_bounds = tiles[row][col].getGlobalBounds();
-		sf::Vector2f pos;
-		pos.x = tile_bounds.left + tile_bounds.width / 2;
-		pos.y = tile_bounds.top + tile_bounds.height / 2;
-		bool hit = false;
-		if (tile.getGlobalBounds().contains(pos)) {
-					hit = true;
+	bool isHit(int row, int col, Tile tile) {
+		if (tile.getGlobalBounds().contains(tiles[row][col].getCenter())) {
+				return true;
 		}
-
+		return false;
 		
-		return hit;
+		
 	}
 };

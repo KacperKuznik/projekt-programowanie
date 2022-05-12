@@ -16,21 +16,20 @@ private:
 		int col = -1;
 	};
 protected:
-	sf::RectangleShape** tiles;
-
-public:
+	Tile** tiles;
 	sf::Color tile_color = sf::Color(240, 240, 240);
 	sf::Color missed_shot_color = sf::Color(200, 200, 200);
+public:
+
 	Grid( int width, int x, int y) {
 		int tile_width = width / rows;
-		tiles = new sf::RectangleShape * [rows];
+		tiles = new Tile * [rows];
 
 		for (int row = 0; row < rows; row++) {
-			tiles[row] = new sf::RectangleShape[cols];
+			tiles[row] = new Tile[cols];
 
 			for (int col = 0; col < cols; col++) {
-				Tile tile_obj(tile_width, tile_color);
-				sf::RectangleShape tile = tile_obj.createTile();
+				Tile tile(tile_width, tile_color);
 				tile.setPosition(x + tile_width *row, y + tile_width *col);
 				tiles[row][col] = tile;
 				
@@ -38,7 +37,7 @@ public:
 		}
 
 	}
-	sf::RectangleShape** getTiles() {
+	Tile** getTiles() {
 		return tiles;
 	};
 	void drawGrid(sf::RenderWindow& window) {
