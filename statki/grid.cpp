@@ -3,6 +3,7 @@
 #include "tile.cpp"
 #include <iostream>
 #include "Network.cpp"
+#include "Player.cpp"
 
 class Grid
 {

@@ -5,11 +5,12 @@ class PlayerGrid : public Grid
 	using Grid::Grid;
 
 public:
-	void mark(int row, int col, std::vector< Ship > ships, Network& network) {
+	void mark(int row, int col, std::vector< Ship > ships, Network& network, Player& player) {
 		for (int i = 0; i < ships.size(); i++) {
 			for (int j = 0; j < ships[i].size(); j++) {
 				if (isHit(row, col, ships[i].getTile(j))) {
 					ships[i].hit(j);
+					player.hit();
 					network.reply(true);
 					return;
 				}

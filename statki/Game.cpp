@@ -6,6 +6,7 @@
 #include "ship.cpp"
 #include "PlayerGrid.cpp"
 #include "EnemyGrid.cpp"
+#include "Player.cpp"
 #include <vector>
 class Game
 {
@@ -34,22 +35,25 @@ public:
                 //for (int i = 0; i < 10; i++) {
         //    column_labels[i] = (char)i + 97;
         //}
-        createShips();
+        short int tiles_count;
+        tiles_count = createShips();
+        std::cout << tiles_count;
+        Player player(tiles_count);
+        Player enemy(tiles_count);
         cin >> port;
         network.set_reciever_port(port);
-        //Tile tile(50);
+
 
         
         sf::RenderWindow window(sf::VideoMode(width, height), "statki");
         PlayerGrid player_grid(grid_width, pos_x, pos_y);
-        //Grid my_grid(grid_width, pos_x, pos_y);
         EnemyGrid enemy_grid(grid_width, pos_x + grid_width+3* tile_width, pos_y);
         while (window.isOpen())
         {
             auto result = network.listen();
             if (result.status == 0) {
                 result.packet >> row >> col;
-                player_grid.mark(row, col, ships, network);
+                player_grid.mark(row, col, ships, network, player);
                     
             }
 
@@ -74,15 +78,10 @@ public:
                                 selShip = -1;
                             }
                         }
-                     
-                        //int row = (event.mouseButton.x - pos_x) / tile_width;
-                        //int col = (event.mouseButton.y - pos_y) / tile_width;
-                        //std::cout << "Tile: " << column_labels[row] << col + 1 << endl;
-                        enemy_grid.shoot(mouse, network);
-                        //network.send(row, col);
+                        enemy_grid.shoot(mouse, network, enemy);
                         updateShips(player_grid);
                         checkShips(player_grid);
-
+                        checkWin(player, enemy);
                     }
                     else if (event.mouseButton.button == sf::Mouse::Right) {
                         if (shipIsSelected == true) {
@@ -103,15 +102,21 @@ public:
             window.display();
         }
     }
-    void createShips() {
+
+
+
+    short int createShips() {
+        short int tiles_count = 0;
         int n = 4;
         for (int i = 1; i <= 4; i++) {
             for (int j = 0; j < n; j++) {
                 Ship ship(i, pos_x + tile_width*(i+1)*j, pos_y + grid_width + tile_width*i +tile_width*(i-1)/2);
                 ships.push_back(ship);
+                tiles_count += i;
             }
             n--;
         }
+        return tiles_count;
 
     }
 
@@ -228,4 +233,13 @@ public:
         }
         std::cout << "------------------------------------" << std::endl;
     }
+    void checkWin(Player& player, Player& enemy) {
+        if (player.getTilesCount() == 0) {
+            std::cout << "przegrales";
+        }
+        else if (enemy.getTilesCount() == 0) {
+            std::cout << "wygrales";
+        }
+    }
 };
+
