@@ -22,14 +22,27 @@ public:
 	void placeShip(Ship& ship, sf::Vector2f mouse) {
 		auto pos = getClickedPosition(mouse);
 		if (pos.row >= 0 && pos.col >= 0) {
-			if (pos.row + ship.size() > 10)
-			{
+			if (ship.getRot() == 0) {
+				if (pos.row + ship.size() > 10)
+				{
 
+				}
+				else
+				{
+					sf::Vector2f xy = tiles[pos.row][pos.col].getPosition();
+					ship.setPos(xy);
+				}
 			}
-			else
-			{
-				sf::Vector2f xy = tiles[pos.row][pos.col].getPosition();
-				ship.setPos(xy);
+			else {
+				if (pos.col + ship.size() > 10)
+				{
+
+				}
+				else
+				{
+					sf::Vector2f xy = tiles[pos.row][pos.col].getPosition();
+					ship.setPos(xy);
+				}
 			}
 		}
 	}
@@ -42,8 +55,35 @@ public:
 		if (tile.getGlobalBounds().contains(pos)) {
 					hit = true;
 		}
-
+	
+	
 		
 		return hit;
+	}
+
+	bool canBeRotated(Ship ship) {
+		auto pos = getClickedPosition(ship.getTile(0).getPosition());
+		int size = ship.size();
+		bool rotation = ship.getRot();
+
+		std::cout << std::endl << "Row: " << pos.row << " Col: " << pos.col << " Size: " << size << " Rotation: " << rotation;
+		
+		if (rotation == 0) {
+			if (pos.row + size > 10) {
+				return EXIT_FAILURE;
+			}
+			else {
+				return EXIT_SUCCESS;
+			}
+		}
+		else
+		{
+			if (pos.col + size > 10) {
+				return EXIT_FAILURE;
+			}
+			else {
+				return EXIT_SUCCESS;
+			}
+		}
 	}
 };

@@ -61,11 +61,11 @@ public:
 
                 if (event.type == sf::Event::MouseButtonPressed)
                 {
+                    bool shipIsSelected = selShip != -1;
                     if (event.mouseButton.button == sf::Mouse::Left)
                     {
                         sf::Vector2f mouse(sf::Mouse::getPosition(window));
 
-                        bool shipIsSelected = selShip != -1;
                         if (shipIsSelected == false) {
                             selShip = shipSel(mouse);
                         }
@@ -80,6 +80,11 @@ public:
                         enemy_grid.shoot(mouse, network);
                         //network.send(row, col);
 
+                    }
+                    else if (event.mouseButton.button == sf::Mouse::Right) {
+                        if (shipIsSelected == true) {
+                            shipRotate(ships[selShip], player_grid);
+                        }
                     }
                 }
             }
@@ -124,5 +129,15 @@ public:
     void shipMove(sf::Vector2f mouse, int selShip, PlayerGrid player_grid) {
         player_grid.placeShip(ships[selShip], mouse);
         ships[selShip].chColor(sf::Color::Blue);
+    }
+
+    void shipRotate(Ship ship, PlayerGrid player_grid) {
+        if (player_grid.canBeRotated(ship) == 0) {
+            ship.chRot();
+        }
+        else {
+            std::cout << std::endl << "Nosz kurwa co ty robisz?";
+        }
+
     }
 };
