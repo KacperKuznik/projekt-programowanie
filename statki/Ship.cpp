@@ -9,6 +9,7 @@ private:
 	int tile_width = 50;
 
 	bool rotation = 0;
+	bool isPlaced = false;
 
 	Tile* ship_tiles;
 public:
@@ -87,5 +88,12 @@ public:
 
 	void setRot(bool _rotation) {
 		rotation = _rotation;
+	}
+
+	void setShipToPlaced() {
+		isPlaced = true;
+	}
+	bool checkPlacedState() {
+		return isPlaced;
 	}
 };

@@ -7,6 +7,7 @@ private:
     sf::RectangleShape tile;
 	int tile_width;
 	sf::Color color;
+	bool containsShip = false;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
 	{
 		target.draw(tile, states);
@@ -44,5 +45,11 @@ public:
 		center.x = tile_bounds.left + tile_bounds.width / 2;
 		center.y = tile_bounds.top + tile_bounds.height / 2;
 		return center;
+	}
+	bool checkShipContent() {
+		return containsShip;
+	}
+	void chgShipContent(bool chg) {
+		containsShip = chg;
 	}
 };

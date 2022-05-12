@@ -70,8 +70,9 @@ public:
                             selShip = shipSel(mouse);
                         }
                         else {
-                            shipMove(mouse, selShip, player_grid);
-                            selShip = -1;
+                            if (shipMove(mouse, selShip, player_grid) == EXIT_SUCCESS) {
+                                selShip = -1;
+                            }
                         }
                      
                         //int row = (event.mouseButton.x - pos_x) / tile_width;
@@ -79,6 +80,8 @@ public:
                         //std::cout << "Tile: " << column_labels[row] << col + 1 << endl;
                         enemy_grid.shoot(mouse, network);
                         //network.send(row, col);
+                        updateShips(player_grid);
+                        checkShips(player_grid);
 
                     }
                     else if (event.mouseButton.button == sf::Mouse::Right) {
@@ -124,9 +127,45 @@ public:
         return -1;
     }
 
-    void shipMove(sf::Vector2f mouse, int selShip, PlayerGrid player_grid) {
-        player_grid.placeShip(ships[selShip], mouse);
-        ships[selShip].chColor(sf::Color::Blue);
+    bool shipMove(sf::Vector2f mouse, int selShip, PlayerGrid player_grid) {
+        ships[selShip].setShipToPlaced();
+        std::cout << std::endl << "Ship: " << selShip << " placed!" << std::endl;
+        bool moveNotPossible = false;
+        auto pos = player_grid.getClickedPosition(mouse);
+        if (ships[selShip].getRot() == 0) {
+            for (int i = -1; i < 1; i++) {
+                for (int j = -1; j < ships[selShip].size() + 1; j++) {
+                    if (pos.row + j < 0 || pos.row + j > 10 || pos.col + i > 10 || pos.col + i < 0) {
+                        continue;
+                    }
+                    else if (player_grid.getTiles()[pos.row+j][pos.col+i].checkShipContent() == true) {
+                        moveNotPossible = true;
+                    }
+                }
+            }
+        }
+        else {
+            for (int i = -1; i < ships[selShip].size() + 1; i++) {
+                for (int j = -1; j < 1; j++) {
+                    if (pos.row + j < 0 || pos.row + j > 10 || pos.col + i > 10 || pos.col + i < 0) {
+                        continue;
+                    }
+                    else if (player_grid.getTiles()[pos.row + j][pos.col + i].checkShipContent() == true) {
+                        moveNotPossible = true;
+                    }
+                }
+            }
+        }
+
+        if (moveNotPossible == true) {
+            std::cout << std::endl << "Rusz niemozliwy";
+            return EXIT_FAILURE;
+        }
+        else {
+            player_grid.placeShip(ships[selShip], mouse);
+            ships[selShip].chColor(sf::Color::Blue);
+            return EXIT_SUCCESS;
+        }
     }
 
     bool shipRotate(Ship ship, PlayerGrid player_grid) {
@@ -138,5 +177,55 @@ public:
             
         }
 
+    }
+
+    void updateShips(PlayerGrid player_grid) {
+        for (int i = 0; i < player_grid.getRows(); i++) {
+            for (int j = 0; j < player_grid.getCols(); j++) {
+                player_grid.getTiles()[j][i].chgShipContent(false);
+            }
+        }
+        for (int i = 0; i < ships.size(); i++) {
+            if (ships[i].checkPlacedState() == true)
+            {
+                for (int j = 0; j < player_grid.getRows(); j++) {
+                    for (int k = 0; k < player_grid.getCols(); k++) {
+                        if (player_grid.getTiles()[j][k].getGlobalBounds().contains(ships[i].getTile(0).getCenter())) {
+                            bool rotation = ships[i].getRot();
+                            int size = ships[i].size();
+                            if (rotation == 0) {
+                                for (int l = 0; l < size; l++) {
+                                    player_grid.getTiles()[j + l][k].chgShipContent(true);
+                                }
+                            }
+                            else
+                            {
+                                for (int l = 0; l < size; l++) {
+                                    player_grid.getTiles()[j][k+l].chgShipContent(true);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    void checkShips(PlayerGrid player_grid) {
+        //DEV method. NOT FOR COMMERCIAL USE!!!111
+        std::cout << "------------------------------------" << std::endl;
+        for (int i = 0; i < player_grid.getRows(); i++) {
+            for (int j = 0; j < player_grid.getCols(); j++) {
+                if (player_grid.getTiles()[j][i].checkShipContent() == true) {
+                    std::cout << "X ";
+                }
+                else
+                {
+                    std::cout << "O ";
+                }
+            }
+            std::cout << std::endl;
+        }
+        std::cout << "------------------------------------" << std::endl;
     }
 };

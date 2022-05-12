@@ -60,5 +60,26 @@ public:
 				}
 	}
 
+	void checkShipContent() {
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				if (tiles[i][j].checkShipContent() == 0) {
+					tiles[i][j].setFillColor(sf::Color::White);
+				}
+				else
+				{
+					tiles[i][j].setFillColor(sf::Color::Blue);
+				}
+			}
+		}
+	}
+
+	int getRows() {
+		return rows;
+	}
+
+	int getCols() {
+		return cols;
+	}
 
 };
