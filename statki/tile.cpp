@@ -1,6 +1,9 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <time.h> 
+#include <stdlib.h> 
+#include <stdio.h>
 class Tile : public sf::Drawable
 {
 private:

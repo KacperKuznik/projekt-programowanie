@@ -35,11 +35,15 @@ public:
                 //for (int i = 0; i < 10; i++) {
         //    column_labels[i] = (char)i + 97;
         //}
+        srand(time(NULL));
+
         short int tiles_count;
         tiles_count = createShips();
         std::cout << tiles_count;
         Player player(tiles_count);
         Player enemy(tiles_count);
+        chooseStartingPlayer(player, enemy);
+        cout << player.isPlayerTurn() << enemy.isPlayerTurn() << "-------00000000000";
         cin >> port;
         network.set_reciever_port(port);
 
@@ -239,6 +243,19 @@ public:
         }
         else if (enemy.getTilesCount() == 0) {
             std::cout << "wygrales";
+        }
+    }
+    void chooseStartingPlayer(Player& player, Player& enemy) {
+        if (rand() > (RAND_MAX / 2)) {
+            player.changeTurn();
+            cout << "player";
+        }
+        else
+        {
+            
+            cout << "enemy";
+
+            enemy.changeTurn();
         }
     }
 };

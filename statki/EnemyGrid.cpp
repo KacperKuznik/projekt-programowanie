@@ -16,8 +16,8 @@ public:
 			result.packet >> isHit;
 			cout << result.status << "ishit: " << isHit;
 			if (isHit) {
-				tiles[pos.row][pos.col].setFillColor(sf::Color::Red);
 				enemy.hit();
+				tiles[pos.row][pos.col].setFillColor(sf::Color::Red);
 			}
 			else {
 				tiles[pos.row][pos.col].setFillColor(missed_shot_color);

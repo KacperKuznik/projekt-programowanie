@@ -12,12 +12,14 @@ private:
 	bool isPlaced = false;
 
 	Tile* ship_tiles;
+	sf::Color shipColor = sf::Color(0,255,0);
 public:
 	Ship(short int _length, int x, int y) {
 		length = _length;
 		ship_tiles = new Tile[length];
+		
 		for (int i = 0; i < length; i++) {
-			Tile tile(tile_width, sf::Color::Blue);
+			Tile tile(tile_width, shipColor);
 			tile.setPosition(x + tile_width * i, y);
 			ship_tiles[i] = tile;
 
