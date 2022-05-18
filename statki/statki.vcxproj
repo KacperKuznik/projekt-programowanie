@@ -159,10 +159,8 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerGrid.cpp" />
     <ClCompile Include="Ship.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="Tile.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Media Include="..\..\..\..\Downloads\sus.mp3" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

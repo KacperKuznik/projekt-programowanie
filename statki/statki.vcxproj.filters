@@ -42,10 +42,8 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Media Include="..\..\..\..\Downloads\sus.mp3">
+    <ClCompile Include="SoundManager.cpp">
       <Filter>Source Files</Filter>
-    </Media>
+    </ClCompile>
   </ItemGroup>
 </Project>
