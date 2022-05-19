@@ -13,6 +13,5 @@ public:
     void shoot() {
         shoot_sound.setBuffer(shoot_buffer);
         shoot_sound.play();
-        std::cout << "shoot";
     }
 };

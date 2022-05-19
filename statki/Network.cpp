@@ -39,7 +39,6 @@ public:
         packet.clear();
         packet << isHit;
 
-        std::cout << "send reply" << isHit;
         socket.send(packet, "127.0.0.1", receiver_port);
     }
 };

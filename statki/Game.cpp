@@ -39,11 +39,9 @@ public:
 
         short int tiles_count;
         tiles_count = createShips();
-        std::cout << tiles_count;
         Player player(tiles_count);
         Player enemy(tiles_count);
         chooseStartingPlayer(player, enemy);
-        cout << player.isPlayerTurn() << enemy.isPlayerTurn() << "-------00000000000";
         cin >> port;
         network.set_reciever_port(port);
 
@@ -138,7 +136,7 @@ public:
 
     bool shipMove(sf::Vector2f mouse, int selShip, PlayerGrid player_grid) {
         ships[selShip].setShipToPlaced();
-        std::cout << std::endl << "Ship: " << selShip << " placed!" << std::endl;
+        //std::cout << std::endl << "Ship: " << selShip << " placed!" << std::endl;
         bool moveNotPossible = false;
         auto pos = player_grid.getClickedPosition(mouse);
         if (ships[selShip].getRot() == 0) {
@@ -167,7 +165,7 @@ public:
         }
 
         if (moveNotPossible == true) {
-            std::cout << std::endl << "Rusz niemozliwy";
+            //std::cout << std::endl << "Rusz niemozliwy";
             return EXIT_FAILURE;
         }
         else {
