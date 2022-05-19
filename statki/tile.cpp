@@ -11,6 +11,7 @@ private:
 	int tile_width;
 	sf::Color color;
 	bool containsShip = false;
+	bool hit = false;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
 	{
 		target.draw(tile, states);
@@ -38,6 +39,12 @@ public:
 	}
 	void setFillColor(sf::Color color) {
 		tile.setFillColor(color);
+	}
+	bool isHit() {
+		return hit;
+	}
+	void setHit() {
+		hit = true;
 	}
 	sf::Vector2f getPosition() {
 		return tile.getPosition();
