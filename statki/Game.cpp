@@ -32,9 +32,7 @@ private:
 public:
 
     void run() {
-                //for (int i = 0; i < 10; i++) {
-        //    column_labels[i] = (char)i + 97;
-        //}
+
         srand(time(NULL));
 
         short int tiles_count;
