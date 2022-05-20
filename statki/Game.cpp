@@ -37,16 +37,12 @@ public:
 
         short int tiles_count;
         tiles_count = createShips();
-        std::cout << tiles_count;
         Player player(tiles_count);
         Player enemy(tiles_count);
         chooseStartingPlayer(player, enemy);
-        cout << player.isPlayerTurn() << enemy.isPlayerTurn() << "-------00000000000";
         cin >> port;
         network.set_reciever_port(port);
 
-
-        
         sf::RenderWindow window(sf::VideoMode(width, height), "statki");
         PlayerGrid player_grid(grid_width, pos_x, pos_y);
         EnemyGrid enemy_grid(grid_width, pos_x + grid_width+3* tile_width, pos_y);
@@ -99,8 +95,6 @@ public:
             enemy_grid.drawGrid(window);
             for (Ship ship : ships)
                 ship.drawShip(window);
-            //Grid enemy_grid(window, grid_width, grid_width + grid_width/10,0);
-
             window.display();
         }
     }
@@ -136,7 +130,7 @@ public:
 
     bool shipMove(sf::Vector2f mouse, int selShip, PlayerGrid player_grid) {
         ships[selShip].setShipToPlaced();
-        std::cout << std::endl << "Ship: " << selShip << " placed!" << std::endl;
+        //std::cout << std::endl << "Ship: " << selShip << " placed!" << std::endl;
         bool moveNotPossible = false;
         auto pos = player_grid.getClickedPosition(mouse);
         if (ships[selShip].getRot() == 0) {
@@ -165,7 +159,7 @@ public:
         }
 
         if (moveNotPossible == true) {
-            std::cout << std::endl << "Rusz niemozliwy";
+            //std::cout << std::endl << "Rusz niemozliwy";
             return EXIT_FAILURE;
         }
         else {

@@ -12,7 +12,9 @@ private:
 	bool isPlaced = false;
 
 	Tile* ship_tiles;
-	sf::Color shipColor = sf::Color(0,255,0);
+	sf::Color shipColor = sf::Color(0, 255, 0);
+	sf::Color shipHitColor = sf::Color(200, 0, 0);
+	sf::Color shipSunkColor = sf::Color(255,0,0);
 public:
 	Ship(short int _length, int x, int y) {
 		length = _length;
@@ -46,13 +48,25 @@ public:
 		}
 	}
 	void hit(int i) {
-		ship_tiles[i].setFillColor(sf::Color::Red);
+		if (!ship_tiles[i].isHit()) {
+			ship_tiles[i].setFillColor(shipHitColor);
+			ship_tiles[i].setHit();
+			isSunk();
+		}
 	}
 
 	int size() {
 		return length;
 	}
-
+	bool isSunk() {
+		for (int i = 0; i < length; i++) {
+			if (!ship_tiles[i].isHit()) {
+				return false;
+			}
+		}
+		chColor(shipSunkColor);
+		return true;
+	}
 
 	void setPos(sf::Vector2f position) {
 		if (rotation == 0) {
