@@ -32,9 +32,7 @@ private:
 public:
 
     void run() {
-                //for (int i = 0; i < 10; i++) {
-        //    column_labels[i] = (char)i + 97;
-        //}
+
         srand(time(NULL));
 
         short int tiles_count;
@@ -45,8 +43,6 @@ public:
         cin >> port;
         network.set_reciever_port(port);
 
-
-        
         sf::RenderWindow window(sf::VideoMode(width, height), "statki");
         PlayerGrid player_grid(grid_width, pos_x, pos_y);
         EnemyGrid enemy_grid(grid_width, pos_x + grid_width+3* tile_width, pos_y);
@@ -99,8 +95,6 @@ public:
             enemy_grid.drawGrid(window);
             for (Ship ship : ships)
                 ship.drawShip(window);
-            //Grid enemy_grid(window, grid_width, grid_width + grid_width/10,0);
-
             window.display();
         }
     }
