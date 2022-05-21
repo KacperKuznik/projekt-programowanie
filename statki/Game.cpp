@@ -134,20 +134,21 @@ public:
         bool moveNotPossible = false;
         auto pos = player_grid.getClickedPosition(mouse);
         if (ships[selShip].getRot() == 0) {
-            for (int i = -1; i < 1; i++) {
-                for (int j = -1; j < ships[selShip].size() + 1; j++) {
-                    if (pos.row + j < 0 || pos.row + j > 10 || pos.col + i > 10 || pos.col + i < 0) {
+            for (int i = -1; i <= 1; i++) {
+                for (int j = -1; j <= ships[selShip].size(); j++) {
+                    if (pos.row + j < 0 || pos.row + j >= 10 || pos.col + i >= 10 || pos.col + i < 0) {
                         continue;
                     }
                     else if (player_grid.getTiles()[pos.row+j][pos.col+i].checkShipContent() == true) {
                         moveNotPossible = true;
+                        std::cout << std::endl << "Wykryto konflikt w rejonie statku! Rzad: " << i << " Kolumna: " << j;
                     }
                 }
             }
         }
         else {
-            for (int i = -1; i < ships[selShip].size() + 1; i++) {
-                for (int j = -1; j < 1; j++) {
+            for (int i = -1; i <= ships[selShip].size(); i++) {
+                for (int j = -1; j <= 1; j++) {
                     if (pos.row + j < 0 || pos.row + j > 10 || pos.col + i > 10 || pos.col + i < 0) {
                         continue;
                     }
