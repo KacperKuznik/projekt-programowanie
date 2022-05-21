@@ -23,6 +23,7 @@ private:
 
     int selShip = -1;
     bool shipIsSelected = false;
+    bool selfFound = false;
 
     unsigned short port;
     Network network;
@@ -134,25 +135,53 @@ public:
         bool moveNotPossible = false;
         auto pos = player_grid.getClickedPosition(mouse);
         if (ships[selShip].getRot() == 0) {
-            for (int i = -1; i < 1; i++) {
-                for (int j = -1; j < ships[selShip].size() + 1; j++) {
-                    if (pos.row + j < 0 || pos.row + j > 10 || pos.col + i > 10 || pos.col + i < 0) {
+            for (int i = -1; i <= 1; i++) {
+                for (int j = -1; j <= ships[selShip].size(); j++) {
+                    selfFound = false;
+                    if (pos.row + j < 0 || pos.row + j >= 10 || pos.col + i >= 10 || pos.col + i < 0) {
                         continue;
                     }
                     else if (player_grid.getTiles()[pos.row+j][pos.col+i].checkShipContent() == true) {
-                        moveNotPossible = true;
+                        for (int k = 0; k < ships[selShip].size(); k++) {
+                            if (player_grid.getTiles()[pos.row + j][pos.col + i].getGlobalBounds().contains(ships[selShip].getTile(k).getPosition())) {
+                                //std::cout << std::endl << "Self found at row: "<<pos.row + j<<" col: "<<pos.col + i<< " Skipping!";
+                                selfFound = true;
+                                break;
+                            }
+                        }
+                        if (selfFound == true) {
+                            continue;
+                        }
+                        else {
+                            moveNotPossible = true;
+                            //std::cout << std::endl << "Wykryto konflikt w rejonie statku! Rzad: " << pos.row + j << " Kolumna: " << pos.col + i;
+                        }
+                        
                     }
                 }
             }
         }
         else {
-            for (int i = -1; i < ships[selShip].size() + 1; i++) {
-                for (int j = -1; j < 1; j++) {
-                    if (pos.row + j < 0 || pos.row + j > 10 || pos.col + i > 10 || pos.col + i < 0) {
+            for (int i = -1; i <= ships[selShip].size(); i++) {
+                for (int j = -1; j <= 1; j++) {
+                    if (pos.row + j < 0 || pos.row + j >= 10 || pos.col + i >= 10 || pos.col + i < 0) {
                         continue;
                     }
                     else if (player_grid.getTiles()[pos.row + j][pos.col + i].checkShipContent() == true) {
-                        moveNotPossible = true;
+                        for (int k = 0; k < ships[selShip].size(); k++) {
+                            if (player_grid.getTiles()[pos.row + j][pos.col + i].getGlobalBounds().contains(ships[selShip].getTile(k).getPosition())) {
+                                //std::cout << std::endl << "Self found at row: "<<pos.row + j<<" col: "<<pos.col + i<< " Skipping!";
+                                selfFound = true;
+                                break;
+                            }
+                        }
+                        if (selfFound == true) {
+                            continue;
+                        }
+                        else {
+                            moveNotPossible = true;
+                            //std::cout << std::endl << "Wykryto konflikt w rejonie statku! Rzad: " << pos.row + j << " Kolumna: " << pos.col + i;
+                        }
                     }
                 }
             }
@@ -213,7 +242,7 @@ public:
     }
 
     void checkShips(PlayerGrid player_grid) {
-        //DEV method. NOT FOR COMMERCIAL USE!!!111
+        //DEV method. NOT FOR COMMERCIAL USE!
         std::cout << "------------------------------------" << std::endl;
         for (int i = 0; i < player_grid.getRows(); i++) {
             for (int j = 0; j < player_grid.getCols(); j++) {
