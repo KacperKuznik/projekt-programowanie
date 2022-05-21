@@ -164,6 +164,7 @@ public:
         else {
             for (int i = -1; i <= ships[selShip].size(); i++) {
                 for (int j = -1; j <= 1; j++) {
+                    selfFound = false;
                     if (pos.row + j < 0 || pos.row + j >= 10 || pos.col + i >= 10 || pos.col + i < 0) {
                         continue;
                     }
