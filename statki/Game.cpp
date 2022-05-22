@@ -80,7 +80,7 @@ public:
                         enemy_grid.shoot(mouse, network, enemy);
                         updateShips(player_grid);
                         checkShips(player_grid);
-                        checkWin(player, enemy);
+                        checkWin(player, enemy, window);
                     }
                     else if (event.mouseButton.button == sf::Mouse::Right) {
                         if (shipIsSelected == true) {
@@ -259,12 +259,21 @@ public:
         }
         std::cout << "------------------------------------" << std::endl;
     }
-    void checkWin(Player& player, Player& enemy) {
+    void checkWin(Player& player, Player& enemy, sf::RenderWindow& window) {
+        sf::Text text;
         if (player.getTilesCount() == 0) {
             std::cout << "przegrales";
+            text.setString("lost");
+            text.setFillColor(sf::Color::Red);
+            window.draw(text);
+
         }
         else if (enemy.getTilesCount() == 0) {
             std::cout << "wygrales";
+            text.setString("won");
+            text.setFillColor(sf::Color::Green);
+            window.draw(text);
+
         }
     }
     void chooseStartingPlayer(Player& player, Player& enemy) {
