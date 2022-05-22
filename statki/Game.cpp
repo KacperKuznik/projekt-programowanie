@@ -27,6 +27,8 @@ private:
 
     unsigned short port;
     Network network;
+    sf::Text text;
+    sf::Font font;
 
     std::vector< Ship > ships;
 
@@ -35,6 +37,17 @@ public:
     void run() {
 
         srand(time(NULL));
+
+        if (!font.loadFromFile("fonts/arial.ttf"))
+        {
+        }
+        text.setFont(font);
+        text.setCharacterSize(150);
+
+        sf::FloatRect textRect = text.getLocalBounds();
+        text.setOrigin(textRect.left + textRect.width / 2.0f,
+            textRect.top + textRect.height / 2.0f);
+        text.setPosition(sf::Vector2f(width / 2.0f, height / 2.0f));
 
         short int tiles_count;
         tiles_count = createShips();
@@ -80,7 +93,6 @@ public:
                         enemy_grid.shoot(mouse, network, enemy);
                         updateShips(player_grid);
                         checkShips(player_grid);
-                        checkWin(player, enemy, window);
                     }
                     else if (event.mouseButton.button == sf::Mouse::Right) {
                         if (shipIsSelected == true) {
@@ -92,10 +104,12 @@ public:
             }
 
             window.clear(sf::Color::White);
+            checkWin(player, enemy, window);
             player_grid.drawGrid(window);
             enemy_grid.drawGrid(window);
             for (Ship ship : ships)
                 ship.drawShip(window);
+            window.draw(text);
             window.display();
         }
     }
@@ -260,19 +274,18 @@ public:
         std::cout << "------------------------------------" << std::endl;
     }
     void checkWin(Player& player, Player& enemy, sf::RenderWindow& window) {
-        sf::Text text;
+        std::cout << "player:" << player.getTilesCount() << endl;
+        std::cout << "enemy:" << enemy.getTilesCount() << endl;
         if (player.getTilesCount() == 0) {
             std::cout << "przegrales";
             text.setString("lost");
             text.setFillColor(sf::Color::Red);
-            window.draw(text);
 
         }
         else if (enemy.getTilesCount() == 0) {
             std::cout << "wygrales";
             text.setString("won");
             text.setFillColor(sf::Color::Green);
-            window.draw(text);
 
         }
     }
