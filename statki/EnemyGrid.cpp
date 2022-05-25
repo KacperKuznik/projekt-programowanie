@@ -6,7 +6,7 @@ private:
 	sf::Color shipHitColor = sf::Color(200, 0, 0);
 
 public:
-	void shoot(sf::Vector2f mouse, Network& network, Player& enemy) {
+	void shoot(sf::Vector2f mouse, Network& network, Player& enemy, Player& player) {
 		auto pos = getClickedPosition(mouse);
 		if (pos.row >= 0 && pos.col >= 0){
 			soundmanager.shoot();
@@ -23,6 +23,7 @@ public:
 			}
 			else {
 				tiles[pos.row][pos.col].setFillColor(missed_shot_color);
+				player.changeTurn();
 			}
 		}
 		return;

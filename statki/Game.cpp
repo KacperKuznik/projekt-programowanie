@@ -30,6 +30,7 @@ private:
     unsigned short port;
     Network network;
     sf::Text text;
+    sf::Text playerTurnText;
     sf::Font font;
 
     std::vector< Ship > ships;
@@ -47,6 +48,8 @@ public:
         }
         text.setFont(font);
         text.setCharacterSize(150);
+        playerTurnText.setFont(font);
+        playerTurnText.setCharacterSize(50);
 
         sf::FloatRect textRect = text.getLocalBounds();
         text.setOrigin(textRect.left + textRect.width / 2.0f,
@@ -103,10 +106,12 @@ public:
                             checkShips(player_grid);
                         }
                         else {
-                            enemy_grid.shoot(mouse, network, enemy);
+                            if (player.isPlayerTurn())
+                                enemy_grid.shoot(mouse, network, enemy, player);
                         }
                     }
                     else if (event.mouseButton.button == sf::Mouse::Right) {
+                        
                         if (shipIsSelected == true) {
                             //shipRotate(ships[selShip], player_grid);
                             ships[selShip].setRot(shipRotate(ships[selShip], player_grid));
@@ -123,10 +128,21 @@ public:
                 ship.drawShip(window);
             window.draw(text);
             window.draw(startButton);
+            displayTurnText(window, player.isPlayerTurn());
             window.display();
         }
     }
-
+    void displayTurnText(sf::RenderWindow& window, bool isPlayerTurn) {
+        if (isPlayerTurn) {
+            playerTurnText.setFillColor(sf::Color::Green);
+            playerTurnText.setString("Your turn");
+        }
+        else {
+            playerTurnText.setFillColor(sf::Color::Red);
+            playerTurnText.setString("Enemy turn");
+        }
+        window.draw(playerTurnText);
+    }
 
 
     short int createShips() {
@@ -314,10 +330,7 @@ public:
         }
         else
         {
-            
             cout << "enemy";
-
-            enemy.changeTurn();
         }
     }
 };
