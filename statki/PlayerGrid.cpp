@@ -18,6 +18,7 @@ public:
 		}
 		network.reply(false);
 		tiles[row][col].setFillColor(missed_shot_color);
+		player.changeTurn();
 	}
 
 	void placeShip(Ship& ship, sf::Vector2f mouse) {
