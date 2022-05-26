@@ -8,7 +8,7 @@ private:
 public:
 	void shoot(sf::Vector2f mouse, Network& network, Player& enemy, Player& player) {
 		auto pos = getClickedPosition(mouse);
-		if (pos.row >= 0 && pos.col >= 0){
+		if (pos.row >= 0 && pos.col >= 0 && tiles[pos.row][pos.col].getFillColor() != missed_shot_color && !tiles[pos.row][pos.col].isHit()){
 			soundmanager.shoot();
 			network.send(pos.row, pos.col);
 			auto result = network.listen();

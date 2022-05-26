@@ -40,6 +40,9 @@ public:
 	void setFillColor(sf::Color color) {
 		tile.setFillColor(color);
 	}
+	sf::Color getFillColor() {
+		return tile.getFillColor();
+	}
 	bool isHit() {
 		return hit;
 	}

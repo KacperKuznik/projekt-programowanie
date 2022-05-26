@@ -12,6 +12,7 @@ private:
     unsigned short port;
     unsigned short receiver_port;
 
+
 public:
     Network()
     {
