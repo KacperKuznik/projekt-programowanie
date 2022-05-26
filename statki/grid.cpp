@@ -35,10 +35,8 @@ public:
 				Tile tile(tile_width, tile_color);
 				tile.setPosition(x + tile_width *row, y + tile_width *col);
 				tiles[row][col] = tile;
-				
 			}
 		}
-
 	}
 	Tile** getTiles() {
 		return tiles;
@@ -49,7 +47,6 @@ public:
 				window.draw(tiles[row][col]);
 			}
 		}
-
 	}
 	auto getClickedPosition(sf::Vector2f mouse) {
 
