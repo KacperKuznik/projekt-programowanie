@@ -1,6 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <string>
+#include "SoundManager.cpp"
+
 class Button : public sf::Drawable
 {
 private:
@@ -8,6 +10,8 @@ private:
     sf::Text text;
     sf::Event event;
     sf::Font font;
+    SoundManager soundmanager;
+
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
     {
         target.draw(box, states);
@@ -43,9 +47,13 @@ public:
     const bool isClicked(const sf::Vector2f mouse)
     {
         if (!event.type == sf::Event::MouseButtonPressed) {
-            return false; 
+            return false;
         }
-        return box.getGlobalBounds().contains(mouse);
+        if (box.getGlobalBounds().contains(mouse)) {
+            soundmanager.click();
+            return true;
+        }
+        return false;
     }
     void changeButton(std::string txt = "", sf::Color color = sf::Color::Blue) {
         text.setString(txt);
