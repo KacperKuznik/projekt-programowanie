@@ -10,6 +10,7 @@
 #include <vector>
 #include "Button.cpp"
 #include <string>
+#include <cmath>
 
 class Game
 {
@@ -164,6 +165,12 @@ public:
                             std::cout << "\n Box selection cleared!";
                         }
 
+                        if (joinConfButton.isClicked(mouse)) {
+                            window.close();
+                            std::cout << "\n Closing menu!";
+                            run();
+                        }
+
                     }
                 }
 
@@ -175,24 +182,40 @@ public:
                         break;
 
                     case 1:
-                        std::cout << "\n IP: Entered: " << event.text.unicode;
-
-                        if (event.text.unicode == 8) {
-                            if (!ipInput.isEmpty()) {
-                                ipInput.erase(ipInput.getSize() - 1, 1);
-                                ipText.setString(ipInput);
-                            }
-                            else
-                            {
-                                std::cout << "\n IP: Text field value is empty!";
-                            }
+                        if (ipInput.getSize() >= 15 && event.text.unicode != 8) {
+                            std::cout << "\n IP: Input box is full!";
                         }
                         else {
-                            ipInput += event.text.unicode;
-                            ipText.setString(ipInput);
+                            std::cout << "\n IP: Entered: " << event.text.unicode;
+
+                            if (event.text.unicode == 8) {
+                                if (!ipInput.isEmpty()) {
+                                    ipInput.erase(ipInput.getSize() - 1, 1);
+                                    ipText.setString(ipInput);
+                                }
+                                else
+                                {
+                                    std::cout << "\n IP: Text field value is empty!";
+                                }
+                            }
+                            else {
+                                if (event.text.unicode < 48 || event.text.unicode > 57) {
+                                    std::cout << "\n IP: Input not a number!";
+                                    break;
+                                }
+                                ipInput += event.text.unicode;
+                                if (ipInput.getSize() == 3 or ipInput.getSize() == 7 or ipInput.getSize() == 11) {
+                                    ipInput += ".";
+                                }
+                                ipText.setString(ipInput);
+                            }
                         }
                         break;
                     case 2:
+                        if (portInput.getSize() >= 5 && event.text.unicode != 8) {
+                            std::cout << "\n Port: Input box is full!";
+                            break;
+                        }
                         std::cout << "\n Port: Entered: " << event.text.unicode;
 
                         if (event.text.unicode == 8) {
@@ -206,6 +229,10 @@ public:
                             }
                         }
                         else {
+                            if (event.text.unicode < 48 || event.text.unicode > 57) {
+                                std::cout << "\n Port: Input not a number!";
+                                break;
+                            }
                             portInput += event.text.unicode;
                             portText.setString(portInput);
                         }
@@ -228,8 +255,10 @@ public:
 
     void run() {
 
-        srand(time(NULL));
+        std::cout << "\n Game starting...";
 
+        srand(time(NULL));
+        std::cout << "\n Loading fonts...";
         if (!font.loadFromFile("fonts/arial.ttf"))
         {
         }
@@ -243,18 +272,28 @@ public:
             textRect.top + textRect.height / 2.0f);
         text.setPosition(sf::Vector2f(width / 2.0f, height / 2.0f));
 
+        std::cout << "\n Creating ships...";
         short int ship_tiles_count;
         ship_tiles_count = createShips();
         Player player(ship_tiles_count);
         Player enemy(ship_tiles_count);
+        std::cout << "\n Choosing side... ";
         chooseStartingPlayer(player, enemy);
         cin >> port;
         network.set_reciever_port(port);
 
         Button startButton("START");
+        std::cout << "\n Rendering game window...";
+
         sf::RenderWindow window(sf::VideoMode(width, height), "statki");
+
+        std::cout << "\n Creating player grid...";
         PlayerGrid player_grid(grid_width, pos_x, pos_y);
+
+        std::cout << "\n Creating enemy grid...";
         EnemyGrid enemy_grid(grid_width, pos_x + grid_width+3* tile_width, pos_y);
+
+        std::cout << "\n Loading finished!";
         while (window.isOpen())
         {
             auto result = network.listen();
