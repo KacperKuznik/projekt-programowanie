@@ -10,6 +10,7 @@
 #include <vector>
 #include "Button.cpp"
 #include <string>
+
 class Game
 {
 private:
@@ -33,11 +34,55 @@ private:
     sf::Text playerTurnText;
     sf::Font font;
 
+    sf::Texture bgMenu;
+    sf::Sprite bg;
+
     std::vector< Ship > ships;
 
     bool started = false;
 
 public:
+
+    void startMenu() {
+
+
+        Button hostButton("HOST");
+        hostButton.chPos(525, 200);
+
+        Button joinButton("JOIN");
+        joinButton.chPos(525, 350);
+
+        sf::RenderWindow window(sf::VideoMode(width, height), "menu");
+
+        bgMenu.loadFromFile("img/mainbg.jpg");
+        bg.setTexture(bgMenu);
+        while (window.isOpen())
+        {
+
+            sf::Event event;
+            while (window.pollEvent(event))
+            {
+                if (event.type == sf::Event::Closed)
+                    window.close();
+
+                if (event.type == sf::Event::MouseButtonPressed)
+                {
+                    if (event.mouseButton.button == sf::Mouse::Left)
+                    {
+                        sf::Vector2f mouse(sf::Mouse::getPosition(window));
+                        
+
+
+                    }
+                }
+            }
+            window.clear(sf::Color::White);
+            window.draw(bg);
+            window.draw(hostButton);
+            window.draw(joinButton);
+            window.display();
+        }
+    }
 
     void run() {
 

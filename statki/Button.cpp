@@ -59,4 +59,9 @@ public:
         text.setString(txt);
         box.setFillColor(color);
     }
+
+    void chPos(float x, float y) {
+        box.setPosition(x, y);
+        text.setPosition(x, y);
+    }
 };
