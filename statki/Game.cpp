@@ -79,6 +79,10 @@ public:
                             window.close();
                             joinMenu();
                         }
+                        else if (hostButton.isClicked(mouse)) {
+                            window.close();
+                            hostMenu();
+                        }
 
 
                     }
@@ -249,6 +253,71 @@ public:
             window.draw(ipText);
             window.draw(portInputBox);
             window.draw(portText);
+            window.display();
+        }
+    }
+
+    void hostMenu() {
+        sf::RenderWindow window(sf::VideoMode(width, height), "Hostowanie");
+
+        bgMenu.loadFromFile("img/mainbg.jpg");
+        bg.setTexture(bgMenu);
+
+        sf::IpAddress hostIP;
+        std::cout << "\n Checking your IP address...";
+        std::cout << "\n Hosting game at IP address: " << hostIP.getLocalAddress();
+
+        std::cout << "\n Checking your port number...";
+        std::cout << "\n Hosting game at port number: " << network.getPort();
+
+        sf::Text ipTextH;
+        sf::Text portTextH;
+        if (!font.loadFromFile("fonts/arial.ttf"))
+        {
+        }
+        ipTextH.setFont(font);
+        ipTextH.setCharacterSize(50);
+        ipTextH.setFillColor(sf::Color::Black);
+        ipTextH.setPosition(400, 50);
+        ipTextH.setString(hostIP.getLocalAddress().toString());
+
+        portTextH.setFont(font);
+        portTextH.setCharacterSize(50);
+        portTextH.setFillColor(sf::Color::Black);
+        portTextH.setPosition(450, 150);
+        portTextH.setString(std::to_string(network.getPort()));
+
+        Button runGame("Start");
+        runGame.chPos(525, 350);
+
+        while (window.isOpen())
+        {
+
+            sf::Event event;
+            while (window.pollEvent(event))
+            {
+                if (event.type == sf::Event::Closed)
+                    window.close();
+
+                if (event.type == sf::Event::MouseButtonPressed)
+                {
+                    if (event.mouseButton.button == sf::Mouse::Left)
+                    {
+                        sf::Vector2f mouse(sf::Mouse::getPosition(window));
+
+                        if (runGame.isClicked(mouse)) {
+                            window.close();
+                            std::cout << "\n Closing menu!";
+                            run();
+                        }
+                    }
+                }
+            }
+            window.clear(sf::Color::White);
+            window.draw(bg);
+            window.draw(ipTextH);
+            window.draw(portTextH);
+            window.draw(runGame);
             window.display();
         }
     }
