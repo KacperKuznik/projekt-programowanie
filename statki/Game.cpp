@@ -11,6 +11,7 @@
 #include "Button.cpp"
 #include <string>
 #include <cmath>
+#include <sstream>
 
 class Game
 {
@@ -42,6 +43,7 @@ private:
     sf::String portInput;
 
     std::vector< Ship > ships;
+    Player player;
 
     bool started = false;
 
@@ -134,10 +136,14 @@ public:
         portInputBox.setPosition(395, 150);
 
         unsigned int boxSelected = 0;
-
+        sf::IpAddress joinIp;
         while (window.isOpen())
         {
-
+            auto result = network.listen();
+            if (result.status == 0) {
+                window.close();
+                run();
+            }
             sf::Event event;
             while (window.pollEvent(event))
             {
@@ -170,9 +176,16 @@ public:
                         }
 
                         if (joinConfButton.isClicked(mouse)) {
-                            window.close();
-                            std::cout << "\n Closing menu!";
-                            run();
+                            //window.close();
+                            string portstr = portText.getString();
+                            int portnumber = std::stoi(portstr);
+                            network.set_reciever_port(portnumber);
+                            network.set_reciever_ip(ipText.getString());
+                            bool starting = chooseStartingPlayer();
+                            player.setTurn(starting);
+                            network.connect(!starting);
+                            //std::cout << "\n Closing menu!";
+                            //run();s
                         }
 
                     }
@@ -203,14 +216,12 @@ public:
                                 }
                             }
                             else {
-                                if (event.text.unicode < 48 || event.text.unicode > 57) {
-                                    std::cout << "\n IP: Input not a number!";
+                                if ((event.text.unicode < 48 || event.text.unicode > 57) && event.text.unicode != 46) {
+                                    std::cout << "\n IP: Input not a number or dot!";
                                     break;
                                 }
                                 ipInput += event.text.unicode;
-                                if (ipInput.getSize() == 3 or ipInput.getSize() == 7 or ipInput.getSize() == 11) {
-                                    ipInput += ".";
-                                }
+
                                 ipText.setString(ipInput);
                             }
                         }
@@ -292,7 +303,16 @@ public:
 
         while (window.isOpen())
         {
-
+            auto result = network.listen();
+            if (result.status == 0) {
+                bool isStarting;
+                result.packet >> isStarting;
+                player.setTurn(isStarting);
+                cout << "successfully connected " << isStarting << endl;
+                network.reply(!isStarting);
+                window.close();
+                run();
+            }
             sf::Event event;
             while (window.pollEvent(event))
             {
@@ -305,11 +325,11 @@ public:
                     {
                         sf::Vector2f mouse(sf::Mouse::getPosition(window));
 
-                        if (runGame.isClicked(mouse)) {
-                            window.close();
-                            std::cout << "\n Closing menu!";
-                            run();
-                        }
+                        //if (runGame.isClicked(mouse)) {
+                        //    window.close();
+                        //    std::cout << "\n Closing menu!";
+                        //    run();
+                        //}
                     }
                 }
             }
@@ -344,12 +364,11 @@ public:
         std::cout << "\n Creating ships...";
         short int ship_tiles_count;
         ship_tiles_count = createShips();
-        Player player(ship_tiles_count);
+        
+        player.setTilesCount(ship_tiles_count);
         Player enemy(ship_tiles_count);
         std::cout << "\n Choosing side... ";
-        chooseStartingPlayer(player, enemy);
-        cin >> port;
-        network.set_reciever_port(port);
+
 
         Button startButton("START");
         std::cout << "\n Rendering game window...";
@@ -618,15 +637,8 @@ public:
 
         }
     }
-    void chooseStartingPlayer(Player& player, Player& enemy) {
-        if (rand() > (RAND_MAX / 2)) {
-            player.changeTurn();
-            cout << "player";
-        }
-        else
-        {
-            cout << "enemy";
-        }
+    bool chooseStartingPlayer() {
+        return (rand() > (RAND_MAX / 2));
     }
 };
 
