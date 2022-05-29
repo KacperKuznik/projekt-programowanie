@@ -6,6 +6,7 @@ private:
 	short int tiles_count;
 	bool player_turn;
 public:
+	Player() = default;
 	Player(short int _count) {
 		player_turn = false;
 		tiles_count = _count;
@@ -21,6 +22,9 @@ public:
 	}
 	void changeTurn() {
 		player_turn = !player_turn;
+	}
+	void setTurn(bool _player_turn) {
+		player_turn = _player_turn;
 	}
 	bool isPlayerTurn() {
 		return player_turn;
