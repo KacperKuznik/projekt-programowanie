@@ -10,6 +10,8 @@
 #include <vector>
 #include "Button.cpp"
 #include <string>
+#include <cmath>
+
 class Game
 {
 private:
@@ -33,16 +35,299 @@ private:
     sf::Text playerTurnText;
     sf::Font font;
 
+    sf::Texture bgMenu;
+    sf::Sprite bg;
+
+    sf::String ipInput;
+    sf::String portInput;
+
     std::vector< Ship > ships;
 
     bool started = false;
 
 public:
 
+    void startMenu() {
+
+
+        Button hostButton("HOST");
+        hostButton.chPos(525, 200);
+
+        Button joinButton("JOIN");
+        joinButton.chPos(525, 350);
+
+        sf::RenderWindow window(sf::VideoMode(width, height), "menu");
+
+        bgMenu.loadFromFile("img/mainbg.jpg");
+        bg.setTexture(bgMenu);
+        while (window.isOpen())
+        {
+
+            sf::Event event;
+            while (window.pollEvent(event))
+            {
+                if (event.type == sf::Event::Closed)
+                    window.close();
+
+                if (event.type == sf::Event::MouseButtonPressed)
+                {
+                    if (event.mouseButton.button == sf::Mouse::Left)
+                    {
+                        sf::Vector2f mouse(sf::Mouse::getPosition(window));
+                        
+                        if (joinButton.isClicked(mouse)) {
+                            window.close();
+                            joinMenu();
+                        }
+                        else if (hostButton.isClicked(mouse)) {
+                            window.close();
+                            hostMenu();
+                        }
+
+
+                    }
+                }
+            }
+            window.clear(sf::Color::White);
+            window.draw(bg);
+            window.draw(hostButton);
+            window.draw(joinButton);
+            window.display();
+        }
+    }
+
+    void joinMenu() {
+        sf::RenderWindow window(sf::VideoMode(width, height), "Dolaczanie");
+        sf::Text ipText;
+        sf::Text portText;
+        if (!font.loadFromFile("fonts/arial.ttf"))
+        {
+        }
+        ipText.setFont(font);
+        ipText.setCharacterSize(50);
+        ipText.setFillColor(sf::Color::Black);
+        ipText.setPosition(400, 50);
+
+        portText.setFont(font);
+        portText.setCharacterSize(50);
+        portText.setFillColor(sf::Color::Black);
+        portText.setPosition(400, 150);
+
+        Button joinConfButton("Dolacz");
+        joinConfButton.chPos(525, 300);
+
+        bgMenu.loadFromFile("img/mainbg.jpg");
+        bg.setTexture(bgMenu);
+
+        sf::RectangleShape ipInputBox(sf::Vector2f(400,60));
+
+        ipInputBox.setFillColor(sf::Color::White);
+        ipInputBox.setOutlineThickness(5);
+        ipInputBox.setOutlineColor(sf::Color::Black);
+        ipInputBox.setPosition(395, 50);
+
+        sf::RectangleShape portInputBox(sf::Vector2f(400, 60));
+
+        portInputBox.setFillColor(sf::Color::White);
+        portInputBox.setOutlineThickness(5);
+        portInputBox.setOutlineColor(sf::Color::Black);
+        portInputBox.setPosition(395, 150);
+
+        unsigned int boxSelected = 0;
+
+        while (window.isOpen())
+        {
+
+            sf::Event event;
+            while (window.pollEvent(event))
+            {
+                if (event.type == sf::Event::Closed)
+                    window.close();
+
+                if (event.type == sf::Event::MouseButtonPressed)
+                {
+                    if (event.mouseButton.button == sf::Mouse::Left)
+                    {
+                        sf::Vector2f mouse(sf::Mouse::getPosition(window));
+
+                        if (ipInputBox.getGlobalBounds().contains(mouse)) {
+                            boxSelected = 1;
+                            portInputBox.setFillColor(sf::Color::White);
+                            ipInputBox.setFillColor(sf::Color(120,120,120,255));
+                            std::cout << "\n IP box selected!";
+                        }
+                        else if (portInputBox.getGlobalBounds().contains(mouse)) {
+                            boxSelected = 2;
+                            ipInputBox.setFillColor(sf::Color::White);
+                            portInputBox.setFillColor(sf::Color(120, 120, 120, 255));
+                            std::cout << "\n Port box selected!";
+                        }
+                        else {
+                            boxSelected = 0;
+                            ipInputBox.setFillColor(sf::Color::White);
+                            portInputBox.setFillColor(sf::Color::White);
+                            std::cout << "\n Box selection cleared!";
+                        }
+
+                        if (joinConfButton.isClicked(mouse)) {
+                            window.close();
+                            std::cout << "\n Closing menu!";
+                            run();
+                        }
+
+                    }
+                }
+
+                else if (event.type == sf::Event::TextEntered)
+                {
+                    switch (boxSelected) {
+                    case 0:
+                        std::cout << "\n None box selected!";
+                        break;
+
+                    case 1:
+                        if (ipInput.getSize() >= 15 && event.text.unicode != 8) {
+                            std::cout << "\n IP: Input box is full!";
+                        }
+                        else {
+                            std::cout << "\n IP: Entered: " << event.text.unicode;
+
+                            if (event.text.unicode == 8) {
+                                if (!ipInput.isEmpty()) {
+                                    ipInput.erase(ipInput.getSize() - 1, 1);
+                                    ipText.setString(ipInput);
+                                }
+                                else
+                                {
+                                    std::cout << "\n IP: Text field value is empty!";
+                                }
+                            }
+                            else {
+                                if (event.text.unicode < 48 || event.text.unicode > 57) {
+                                    std::cout << "\n IP: Input not a number!";
+                                    break;
+                                }
+                                ipInput += event.text.unicode;
+                                if (ipInput.getSize() == 3 or ipInput.getSize() == 7 or ipInput.getSize() == 11) {
+                                    ipInput += ".";
+                                }
+                                ipText.setString(ipInput);
+                            }
+                        }
+                        break;
+                    case 2:
+                        if (portInput.getSize() >= 5 && event.text.unicode != 8) {
+                            std::cout << "\n Port: Input box is full!";
+                            break;
+                        }
+                        std::cout << "\n Port: Entered: " << event.text.unicode;
+
+                        if (event.text.unicode == 8) {
+                            if (!portInput.isEmpty()) {
+                                portInput.erase(portInput.getSize() - 1, 1);
+                                portText.setString(portInput);
+                            }
+                            else
+                            {
+                                std::cout << "\n Port: Text field value is empty!";
+                            }
+                        }
+                        else {
+                            if (event.text.unicode < 48 || event.text.unicode > 57) {
+                                std::cout << "\n Port: Input not a number!";
+                                break;
+                            }
+                            portInput += event.text.unicode;
+                            portText.setString(portInput);
+                        }
+                        break;
+                    }
+                    
+
+                }
+            }
+            window.clear(sf::Color::White);
+            window.draw(bg);
+            window.draw(joinConfButton);
+            window.draw(ipInputBox);
+            window.draw(ipText);
+            window.draw(portInputBox);
+            window.draw(portText);
+            window.display();
+        }
+    }
+
+    void hostMenu() {
+        sf::RenderWindow window(sf::VideoMode(width, height), "Hostowanie");
+
+        bgMenu.loadFromFile("img/mainbg.jpg");
+        bg.setTexture(bgMenu);
+
+        sf::IpAddress hostIP;
+        std::cout << "\n Checking your IP address...";
+        std::cout << "\n Hosting game at IP address: " << hostIP.getLocalAddress();
+
+        std::cout << "\n Checking your port number...";
+        std::cout << "\n Hosting game at port number: " << network.getPort();
+
+        sf::Text ipTextH;
+        sf::Text portTextH;
+        if (!font.loadFromFile("fonts/arial.ttf"))
+        {
+        }
+        ipTextH.setFont(font);
+        ipTextH.setCharacterSize(50);
+        ipTextH.setFillColor(sf::Color::Black);
+        ipTextH.setPosition(400, 50);
+        ipTextH.setString(hostIP.getLocalAddress().toString());
+
+        portTextH.setFont(font);
+        portTextH.setCharacterSize(50);
+        portTextH.setFillColor(sf::Color::Black);
+        portTextH.setPosition(450, 150);
+        portTextH.setString(std::to_string(network.getPort()));
+
+        Button runGame("Start");
+        runGame.chPos(525, 350);
+
+        while (window.isOpen())
+        {
+
+            sf::Event event;
+            while (window.pollEvent(event))
+            {
+                if (event.type == sf::Event::Closed)
+                    window.close();
+
+                if (event.type == sf::Event::MouseButtonPressed)
+                {
+                    if (event.mouseButton.button == sf::Mouse::Left)
+                    {
+                        sf::Vector2f mouse(sf::Mouse::getPosition(window));
+
+                        if (runGame.isClicked(mouse)) {
+                            window.close();
+                            std::cout << "\n Closing menu!";
+                            run();
+                        }
+                    }
+                }
+            }
+            window.clear(sf::Color::White);
+            window.draw(bg);
+            window.draw(ipTextH);
+            window.draw(portTextH);
+            window.draw(runGame);
+            window.display();
+        }
+    }
+
     void run() {
 
-        srand(time(NULL));
+        std::cout << "\n Game starting...";
 
+        srand(time(NULL));
+        std::cout << "\n Loading fonts...";
         if (!font.loadFromFile("fonts/arial.ttf"))
         {
         }
@@ -56,18 +341,28 @@ public:
             textRect.top + textRect.height / 2.0f);
         text.setPosition(sf::Vector2f(width / 2.0f, height / 2.0f));
 
+        std::cout << "\n Creating ships...";
         short int ship_tiles_count;
         ship_tiles_count = createShips();
         Player player(ship_tiles_count);
         Player enemy(ship_tiles_count);
+        std::cout << "\n Choosing side... ";
         chooseStartingPlayer(player, enemy);
         cin >> port;
         network.set_reciever_port(port);
 
         Button startButton("START");
+        std::cout << "\n Rendering game window...";
+
         sf::RenderWindow window(sf::VideoMode(width, height), "statki");
+
+        std::cout << "\n Creating player grid...";
         PlayerGrid player_grid(grid_width, pos_x, pos_y);
+
+        std::cout << "\n Creating enemy grid...";
         EnemyGrid enemy_grid(grid_width, pos_x + grid_width+3* tile_width, pos_y);
+
+        std::cout << "\n Loading finished!";
         while (window.isOpen())
         {
             auto result = network.listen();

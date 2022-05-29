@@ -42,4 +42,8 @@ public:
 
         socket.send(packet, "127.0.0.1", receiver_port);
     }
+    unsigned short getPort(){
+        return socket.getLocalPort();
+    }
+
 };
