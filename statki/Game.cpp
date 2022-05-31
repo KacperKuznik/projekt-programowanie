@@ -115,7 +115,7 @@ public:
         portText.setFillColor(sf::Color::Black);
         portText.setPosition(400, 150);
 
-        Button joinConfButton("Dolacz");
+        Button joinConfButton("Join");
         joinConfButton.chPos(525, 300);
 
         bgMenu.loadFromFile("img/mainbg.jpg");
@@ -176,7 +176,6 @@ public:
                         }
 
                         if (joinConfButton.isClicked(mouse)) {
-                            //window.close();
                             string portstr = portText.getString();
                             int portnumber = std::stoi(portstr);
                             network.set_reciever_port(portnumber);
@@ -184,8 +183,6 @@ public:
                             bool starting = chooseStartingPlayer();
                             player.setTurn(starting);
                             network.connect(!starting);
-                            //std::cout << "\n Closing menu!";
-                            //run();s
                         }
 
                     }
@@ -298,8 +295,7 @@ public:
         portTextH.setPosition(450, 150);
         portTextH.setString(std::to_string(network.getPort()));
 
-        Button runGame("Start");
-        runGame.chPos(525, 350);
+
 
         while (window.isOpen())
         {
@@ -318,26 +314,11 @@ public:
             {
                 if (event.type == sf::Event::Closed)
                     window.close();
-
-                if (event.type == sf::Event::MouseButtonPressed)
-                {
-                    if (event.mouseButton.button == sf::Mouse::Left)
-                    {
-                        sf::Vector2f mouse(sf::Mouse::getPosition(window));
-
-                        //if (runGame.isClicked(mouse)) {
-                        //    window.close();
-                        //    std::cout << "\n Closing menu!";
-                        //    run();
-                        //}
-                    }
-                }
             }
             window.clear(sf::Color::White);
             window.draw(bg);
             window.draw(ipTextH);
             window.draw(portTextH);
-            window.draw(runGame);
             window.display();
         }
     }
@@ -427,7 +408,6 @@ public:
                     else if (event.mouseButton.button == sf::Mouse::Right) {
                         
                         if (shipIsSelected == true) {
-                            //shipRotate(ships[selShip], player_grid);
                             ships[selShip].setRot(shipRotate(ships[selShip], player_grid));
                         }
                     }
@@ -495,7 +475,6 @@ public:
 
     bool shipMove(sf::Vector2f mouse, int selShip, PlayerGrid player_grid) {
         ships[selShip].setShipToPlaced();
-        //std::cout << std::endl << "Ship: " << selShip << " placed!" << std::endl;
         bool moveNotPossible = false;
         auto pos = player_grid.getClickedPosition(mouse);
         if (ships[selShip].getRot() == 0) {
@@ -508,7 +487,6 @@ public:
                     else if (player_grid.getTiles()[pos.row+j][pos.col+i].checkShipContent() == true) {
                         for (int k = 0; k < ships[selShip].size(); k++) {
                             if (player_grid.getTiles()[pos.row + j][pos.col + i].getGlobalBounds().contains(ships[selShip].getTile(k).getPosition())) {
-                                //std::cout << std::endl << "Self found at row: "<<pos.row + j<<" col: "<<pos.col + i<< " Skipping!";
                                 selfFound = true;
                                 break;
                             }
@@ -518,7 +496,6 @@ public:
                         }
                         else {
                             moveNotPossible = true;
-                            //std::cout << std::endl << "Wykryto konflikt w rejonie statku! Rzad: " << pos.row + j << " Kolumna: " << pos.col + i;
                         }
                         
                     }
@@ -535,7 +512,6 @@ public:
                     else if (player_grid.getTiles()[pos.row + j][pos.col + i].checkShipContent() == true) {
                         for (int k = 0; k < ships[selShip].size(); k++) {
                             if (player_grid.getTiles()[pos.row + j][pos.col + i].getGlobalBounds().contains(ships[selShip].getTile(k).getPosition())) {
-                                //std::cout << std::endl << "Self found at row: "<<pos.row + j<<" col: "<<pos.col + i<< " Skipping!";
                                 selfFound = true;
                                 break;
                             }
@@ -545,7 +521,6 @@ public:
                         }
                         else {
                             moveNotPossible = true;
-                            //std::cout << std::endl << "Wykryto konflikt w rejonie statku! Rzad: " << pos.row + j << " Kolumna: " << pos.col + i;
                         }
                     }
                 }
@@ -553,7 +528,6 @@ public:
         }
 
         if (moveNotPossible == true) {
-            //std::cout << std::endl << "Rusz niemozliwy";
             return EXIT_FAILURE;
         }
         else {
@@ -625,13 +599,11 @@ public:
     }
     void checkWin(Player& player, Player& enemy, sf::RenderWindow& window) {
         if (player.getTilesCount() == 0) {
-            std::cout << "przegrales";
             text.setString("lost");
             text.setFillColor(sf::Color::Red);
 
         }
         else if (enemy.getTilesCount() == 0) {
-            std::cout << "wygrales";
             text.setString("won");
             text.setFillColor(sf::Color::Green);
 

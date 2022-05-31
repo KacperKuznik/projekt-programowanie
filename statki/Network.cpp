@@ -18,7 +18,7 @@ public:
     {
         if (socket.bind(sf::Socket::AnyPort) != sf::Socket::Done)
         {
-            // error...
+
         }
         cout << "created socket at port: " << socket.getLocalPort() << endl; 
         socket.setBlocking(false);

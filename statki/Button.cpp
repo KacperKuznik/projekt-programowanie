@@ -37,10 +37,6 @@ public:
         text.setFont(font);
         text.setCharacterSize(50*0.75);
         text.setPosition(x, y);
-        //sf::FloatRect textRect = text.getLocalBounds();
-        //text.setOrigin(textRect.left + textRect.width / 2.0f,
-        //    textRect.top + textRect.height / 2.0f);
-        //text.setPosition(sf::Vector2f(width / 2.0f, height / 2.0f));
         text.setString(txt);
         text.setFillColor(sf::Color::White);
     }
