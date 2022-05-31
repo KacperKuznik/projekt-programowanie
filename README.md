@@ -7,3 +7,5 @@ Każdy z graczy posiada po dwie plansze o wielkości, 10x10 pól. Pola oznaczone
 Trafienie okrętu przeciwnika polega na strzale, który jest odgadnięciem położenia jakiegoś statku. Strzały oddawane są naprzemiennie, poprzez podanie współrzędnych pola. W przypadku strzału trafionego, gracz kontynuuje strzelanie (czyli swój ruch) aż do momentu chybienia. Zatopienie statku ma miejsce wówczas, gdy gracz odgadnie położenie całego statku.
 
 Wygrywa ten, kto pierwszy zatopi wszystkie statki przeciwnika.  
+![image](https://user-images.githubusercontent.com/72694863/171263491-95fd47e1-d52d-4259-a51f-6f3d10914bb1.png)
+![image](https://user-images.githubusercontent.com/72694863/171265055-f69912ee-f6ff-46cb-b06a-3e66052e7f2e.png)
