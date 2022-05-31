@@ -336,6 +336,9 @@ public:
         text.setCharacterSize(150);
         playerTurnText.setFont(font);
         playerTurnText.setCharacterSize(50);
+        sf::FloatRect turnTextRect = text.getLocalBounds();
+
+        playerTurnText.setPosition(450, 700);
 
         sf::FloatRect textRect = text.getLocalBounds();
         text.setOrigin(textRect.left + textRect.width / 2.0f,
