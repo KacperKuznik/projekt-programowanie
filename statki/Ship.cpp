@@ -15,6 +15,7 @@ private:
 	sf::Color shipColor = sf::Color(0, 255, 0);
 	sf::Color shipHitColor = sf::Color(200, 0, 0);
 	sf::Color shipSunkColor = sf::Color(255,0,0);
+	bool sunk = false;
 public:
 	Ship(short int _length, int x, int y) {
 		length = _length;

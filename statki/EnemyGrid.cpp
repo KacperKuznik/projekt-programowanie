@@ -15,8 +15,9 @@ public:
 			while (result.status != 0) {
 				result = network.listen();
 			};
-			bool isHit;
-			result.packet >> isHit;
+			bool isHit, isSunk;
+			result.packet >> isHit >> isSunk;
+			cout << isSunk;
 			if (isHit) {
 				enemy.hit();
 				tiles[pos.row][pos.col].setFillColor(shipHitColor);

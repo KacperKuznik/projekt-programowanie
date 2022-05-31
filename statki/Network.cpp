@@ -49,9 +49,9 @@ public:
         packet << isStarting;
         socket.send(packet, receiver_ip, receiver_port);
     }
-    void reply(bool isHit) {
+    void reply(bool isHit, bool isSunk = 0) {
         packet.clear();
-        packet << isHit;
+        packet << isHit << isSunk;
         socket.send(packet, receiver_ip, receiver_port);
     }
     unsigned short getPort(){

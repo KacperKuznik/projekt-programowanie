@@ -11,7 +11,7 @@ public:
 				if (isHit(row, col, ships[i].getTile(j))) {
 					ships[i].hit(j);
 					player.hit();
-					network.reply(true);
+					network.reply(true, ships[i].isSunk());
 					return;
 				}
 			}
