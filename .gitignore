@@ -364,3 +364,6 @@ FodyWeavers.xsd
 
 # nowe
 *.sln
+
+# other unnecessary files
+old_files

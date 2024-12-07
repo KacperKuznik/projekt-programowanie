@@ -1,85 +1,70 @@
-#pragma once
-#include <SFML/Graphics.hpp>
-#include "tile.cpp"
-#include <iostream>
-#include "Network.cpp"
-#include "Player.cpp"
-#include "SoundManager.cpp"
+#include "Grid.hpp"
 
-class Grid
-{
-private:
-	int rows = 10;
-	int cols = 10;
-	struct Position
-	{
-		int row = -1;
-		int col = -1;
-	};
-protected:
-	Tile** tiles;
-	sf::Color tile_color = sf::Color(240, 240, 240);
-	sf::Color missed_shot_color = sf::Color(200, 200, 200);
-	SoundManager soundmanager;
+Grid::Grid(int width, int x, int y) {
+    int tileWidth = width / rows;
+    tiles = new Tile * [rows];
 
-public:
+    for (int row = 0; row < rows; row++) {
+        tiles[row] = new Tile[cols];
 
-	Grid( int width, int x, int y) {
-		int tile_width = width / rows;
-		tiles = new Tile * [rows];
+        for (int col = 0; col < cols; col++) {
+            Tile tile(tileWidth, tileColor);
+            tile.setPosition(x + tileWidth * row, y + tileWidth * col);
+            tiles[row][col] = tile;
+        }
+    }
+}
 
-		for (int row = 0; row < rows; row++) {
-			tiles[row] = new Tile[cols];
+Grid::~Grid() {
+    for (int row = 0; row < rows; row++) {
+        delete[] tiles[row];
+    }
+    delete[] tiles;
+}
 
-			for (int col = 0; col < cols; col++) {
-				Tile tile(tile_width, tile_color);
-				tile.setPosition(x + tile_width *row, y + tile_width *col);
-				tiles[row][col] = tile;
-			}
-		}
-	}
-	Tile** getTiles() {
-		return tiles;
-	};
-	void drawGrid(sf::RenderWindow& window) {
-		for (int row = 0; row < rows; row++) {
-			for (int col = 0; col < cols; col++) {
-				window.draw(tiles[row][col]);
-			}
-		}
-	}
-	auto getClickedPosition(sf::Vector2f mouse) {
+Tile** Grid::getTiles() {
+    return tiles;
+}
 
-		struct Position pos;
-		for (int row = 0; row < 10; row++)
-			for (int col = 0; col < 10; col++)
-				if (tiles[row][col].getGlobalBounds().contains(mouse)) {
-					pos.row = row;
-					pos.col = col;
-					return pos;
-				}
-	}
+void Grid::drawGrid(sf::RenderWindow& window) {
+    for (int row = 0; row < rows; row++) {
+        for (int col = 0; col < cols; col++) {
+            window.draw(tiles[row][col]);
+        }
+    }
+}
 
-	void checkShipContent() {
-		for (int i = 0; i < rows; i++) {
-			for (int j = 0; j < cols; j++) {
-				if (tiles[i][j].checkShipContent() == 0) {
-					tiles[i][j].setFillColor(sf::Color::White);
-				}
-				else
-				{
-					tiles[i][j].setFillColor(sf::Color::Blue);
-				}
-			}
-		}
-	}
+Grid::Position Grid::getClickedPosition(sf::Vector2f mouse) {
+    Position pos;
+    for (int row = 0; row < rows; row++) {
+        for (int col = 0; col < cols; col++) {
+            if (tiles[row][col].getGlobalBounds().contains(mouse)) {
+                pos.row = row;
+                pos.col = col;
+                return pos;
+            }
+        }
+    }
+    return pos; // Default position if no tile is clicked
+}
 
-	int getRows() {
-		return rows;
-	}
+void Grid::checkShipContent() {
+    for (int row = 0; row < rows; row++) {
+        for (int col = 0; col < cols; col++) {
+            if (!tiles[row][col].checkShipContent()) {
+                tiles[row][col].setFillColor(sf::Color::White);
+            }
+            else {
+                tiles[row][col].setFillColor(sf::Color::Blue);
+            }
+        }
+    }
+}
 
-	int getCols() {
-		return cols;
-	}
+int Grid::getRows() const {
+    return rows;
+}
 
-};
+int Grid::getCols() const {
+    return cols;
+}

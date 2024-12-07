@@ -1,61 +1,52 @@
-#pragma once
-#include <SFML/Network.hpp>
+#include "Network.hpp"
 #include <iostream>
 
-using namespace std;
-class Network {
-private:
-	sf::UdpSocket socket;
-    int row, col;
-    sf::Packet packet;
-    sf::IpAddress sender;
-    unsigned short port;
-    unsigned short receiver_port;
-    sf::IpAddress receiver_ip;
+Network::Network() {
+    if (socket.bind(sf::Socket::AnyPort) != sf::Socket::Done) {
+        // Handle socket bind error if needed
+    }
+    std::cout << "Created socket at port: " << socket.getLocalPort() << std::endl;
+    socket.setBlocking(false);
+}
 
-public:
-    Network()
-    {
-        if (socket.bind(sf::Socket::AnyPort) != sf::Socket::Done)
-        {
+Network::Result Network::listen() {
+    sf::Socket::Status status = socket.receive(packet, sender, port);
 
-        }
-        cout << "created socket at port: " << socket.getLocalPort() << endl; 
-        socket.setBlocking(false);
-    }
-    auto listen() {
-        struct result { sf::Socket::Status status; sf::Packet packet; };
-        sf::Socket::Status status = socket.receive(packet, sender, port);
-        if (!receiver_port || receiver_ip.toString() == "") {
-            set_reciever_ip(sender.toString());
-            set_reciever_port(port);
-        }
-        return result{  status, packet };
-    }
-    void set_reciever_port(unsigned short _receiver_port) {
-        receiver_port = _receiver_port;
-    }
-    void set_reciever_ip(sf::String _receiver_ip) {
-        receiver_ip = sf::IpAddress(_receiver_ip);
-    }
-    void send(int row, int col) {
-        packet.clear();
-        packet << row << col;
-        socket.send(packet, receiver_ip, receiver_port);
-    }
-    void connect(bool isStarting) {
-        std::cout << "\nConnecting with " << receiver_ip << "on port " << receiver_port;
-        packet.clear();
-        packet << isStarting;
-        socket.send(packet, receiver_ip, receiver_port);
-    }
-    void reply(bool isHit) {
-        packet.clear();
-        packet << isHit;
-        socket.send(packet, receiver_ip, receiver_port);
-    }
-    unsigned short getPort(){
-        return socket.getLocalPort();
+    if (!receiverPort || receiverIp.toString().empty()) {
+        setReceiverIp(sender.toString());
+        setReceiverPort(port);
     }
 
-};
+    return { status, packet };
+}
+
+void Network::setReceiverPort(unsigned short receiverPort) {
+    this->receiverPort = receiverPort;
+}
+
+void Network::setReceiverIp(const sf::String& receiverIp) {
+    this->receiverIp = sf::IpAddress(receiverIp);
+}
+
+void Network::send(int row, int col) {
+    packet.clear();
+    packet << row << col;
+    socket.send(packet, receiverIp, receiverPort);
+}
+
+void Network::connect(bool isStarting) {
+    std::cout << "\nConnecting with " << receiverIp << " on port " << receiverPort;
+    packet.clear();
+    packet << isStarting;
+    socket.send(packet, receiverIp, receiverPort);
+}
+
+void Network::reply(bool isHit) {
+    packet.clear();
+    packet << isHit;
+    socket.send(packet, receiverIp, receiverPort);
+}
+
+unsigned short Network::getPort() const {
+    return socket.getLocalPort();
+}
