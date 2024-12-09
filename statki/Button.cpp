@@ -31,7 +31,7 @@ void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 }
 
 bool Button::isClicked(const sf::Vector2f mousePosition) {
-    if (event.type != sf::Event::MouseButtonPressed) {
+    if (!event.type == sf::Event::MouseButtonPressed) {
         return false;
     }
 
