@@ -1,30 +1,32 @@
 #include "Player.hpp"
 
-Player::Player(short int count) {
-    playerTurn = false;
-    tilesCount = count;
+Player::Player() = default;
+
+Player::Player(short int _count) {
+	player_turn = false;
+	tiles_count = _count;
 }
 
 void Player::hit() {
-    tilesCount--;
+	tiles_count--;
 }
 
-short int Player::getTilesCount() const {
-    return tilesCount;
+short int Player::getTilesCount() {
+	return tiles_count;
 }
 
-void Player::setTilesCount(short int count) {
-    tilesCount = count;
+void Player::setTilesCount(short int _count) {
+	tiles_count = _count;
 }
 
 void Player::changeTurn() {
-    playerTurn = !playerTurn;
+	player_turn = !player_turn;
 }
 
-void Player::setTurn(bool turn) {
-    playerTurn = turn;
+void Player::setTurn(bool _player_turn) {
+	player_turn = _player_turn;
 }
 
-bool Player::isPlayerTurn() const {
-    return playerTurn;
+bool Player::isPlayerTurn() {
+	return player_turn;
 }

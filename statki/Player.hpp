@@ -2,19 +2,18 @@
 
 #include <iostream>
 
-class Player {
+class Player
+{
 private:
-    short int tilesCount;
-    bool playerTurn;
-
+	short int tiles_count;
+	bool player_turn;
 public:
-    Player() = default;
-    Player(short int count);
-
-    void hit();
-    short int getTilesCount() const;
-    void setTilesCount(short int count);
-    void changeTurn();
-    void setTurn(bool turn);
-    bool isPlayerTurn() const;
+	Player();
+	Player(short int _count);
+	void hit();
+	short int getTilesCount();
+	void setTilesCount(short int _count);
+	void changeTurn();
+	void setTurn(bool _player_turn);
+	bool isPlayerTurn();
 };

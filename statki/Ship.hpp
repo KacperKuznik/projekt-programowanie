@@ -1,39 +1,33 @@
 #pragma once
 
 #include "Tile.hpp"
-#include <SFML/Graphics.hpp>
+#include <iostream>
 
-class Ship {
+class Ship
+{
 private:
-    short int length = 1;
-    int tileWidth = 50;
+	short int length = 1;
+	int tile_width = 50;
 
-    bool rotation = false;
-    bool isPlaced = false;
+	bool rotation = 0;
+	bool isPlaced = false;
 
-    Tile* shipTiles;
-    sf::Color shipColor = sf::Color(0, 255, 0);
-    sf::Color shipHitColor = sf::Color(200, 0, 0);
-    sf::Color shipSunkColor = sf::Color(255, 0, 0);
-
+	Tile* ship_tiles;
+	sf::Color shipColor = sf::Color(0, 255, 0);
+	sf::Color shipHitColor = sf::Color(200, 0, 0);
+	sf::Color shipSunkColor = sf::Color(255, 0, 0);
 public:
-    Ship(short int length, int x, int y);
-    ~Ship();
-
-    void drawShip(sf::RenderWindow& window);
-    Tile getTile(int index) const;
-
-    void changeColor(sf::Color color);
-    void hit(int index);
-
-    int size() const;
-    bool isSunk();
-
-    void setPosition(sf::Vector2f position);
-    int changeRotation();
-    bool getRotation() const;
-    void setRotation(bool rotation);
-
-    void setShipToPlaced();
-    bool checkPlacedState() const;
+	Ship(short int _length, int x, int y);
+	void drawShip(sf::RenderWindow& window);
+	Tile getTile(int i);
+	void chColor(sf::Color color);
+	void hit(int i);
+	int size();
+	bool isSunk();
+	void setPos(sf::Vector2f position);
+	int chRot();
+	bool getRot();
+	void setRot(bool _rotation);
+	void setShipToPlaced();
+	bool checkPlacedState();
 };

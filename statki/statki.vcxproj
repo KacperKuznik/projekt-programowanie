@@ -20,25 +20,25 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
-    <ClCompile Include="EnemyGrid.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Grid.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="GridEnemy.cpp" />
+    <ClCompile Include="GridPlayer.cpp" />
+    <ClCompile Include="main_old.cpp" />
     <ClCompile Include="Network.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="PlayerGrid.cpp" />
     <ClCompile Include="Ship.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="Tile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.hpp" />
-    <ClInclude Include="EnemyGrid.hpp" />
     <ClInclude Include="Game.hpp" />
     <ClInclude Include="Grid.hpp" />
+    <ClInclude Include="GridEnemy.hpp" />
+    <ClInclude Include="GridPlayer.hpp" />
     <ClInclude Include="Network.hpp" />
     <ClInclude Include="Player.hpp" />
-    <ClInclude Include="PlayerGrid.hpp" />
     <ClInclude Include="Ship.hpp" />
     <ClInclude Include="SoundManager.hpp" />
     <ClInclude Include="Tile.hpp" />

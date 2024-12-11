@@ -1,14 +1,16 @@
+#pragma once
+
 #include "SFML/Graphics.hpp"
-#include <iostream>
 #include "Grid.hpp"
 #include "Network.hpp"
 #include "Tile.hpp"
 #include "Ship.hpp"
-#include "PlayerGrid.hpp"
-#include "EnemyGrid.hpp"
+#include "GridPlayer.hpp"
+#include "GridEnemy.hpp"
 #include "Player.hpp"
-#include <vector>
 #include "Button.hpp"
+#include <vector>
+#include <iostream>
 #include <string>
 #include <cmath>
 #include <sstream>
@@ -46,7 +48,6 @@ private:
     Player player;
 
     bool started = false;
-
 public:
     void startMenu();
     void joinMenu();
@@ -56,10 +57,10 @@ public:
     short int createShips();
     bool allShipsPlaced();
     int shipSel(sf::Vector2f mouse);
-    bool shipMove(sf::Vector2f mouse, int selShip, PlayerGrid player_grid);
-    bool shipRotate(Ship ship, PlayerGrid player_grid);
-    void updateShips(PlayerGrid player_grid);
-    void checkShips(PlayerGrid player_grid);
+    bool shipMove(sf::Vector2f mouse, int selShip, GridPlayer player_grid);
+    bool shipRotate(Ship ship, GridPlayer player_grid);
+    void updateShips(GridPlayer player_grid);
+    void checkShips(GridPlayer player_grid);
     void checkWin(Player& player, Player& enemy, sf::RenderWindow& window);
     bool chooseStartingPlayer();
 };

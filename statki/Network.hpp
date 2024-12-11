@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SFML/Network.hpp"
+#include <SFML/Network.hpp>
 #include <iostream>
 
 class Network {
@@ -10,22 +10,19 @@ private:
     sf::Packet packet;
     sf::IpAddress sender;
     unsigned short port;
-    unsigned short receiverPort;
-    sf::IpAddress receiverIp;
-
+    unsigned short receiver_port;
+    sf::IpAddress receiver_ip;
 public:
-    Network();
-
     struct Result {
         sf::Socket::Status status;
         sf::Packet packet;
     };
-
+    Network();
     Result listen();
-    void setReceiverPort(unsigned short receiverPort);
-    void setReceiverIp(const sf::String& receiverIp);
+    void set_reciever_port(unsigned short _receiver_port);
+    void set_reciever_ip(sf::String _receiver_ip);
     void send(int row, int col);
     void connect(bool isStarting);
     void reply(bool isHit);
-    unsigned short getPort() const;
+    unsigned short getPort();
 };
