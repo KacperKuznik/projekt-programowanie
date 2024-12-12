@@ -11,7 +11,7 @@ private:
     sf::Text text;
     sf::Event event;
     sf::Font font;
-    SoundManager soundmanager;
+    SoundManager soundManager;
     float x, y;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

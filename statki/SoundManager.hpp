@@ -6,10 +6,10 @@
 class SoundManager
 {
 private:
-    sf::SoundBuffer shoot_buffer;
-    sf::Sound shoot_sound;
-    sf::SoundBuffer click_buffer;
-    sf::Sound click_sound;
+    sf::SoundBuffer shootBuffer;
+    sf::Sound shootSound;
+    sf::SoundBuffer clickBuffer;
+    sf::Sound clickSound;
 public:
     SoundManager();
     void shoot();

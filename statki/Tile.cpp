@@ -7,19 +7,19 @@ void Tile::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 Tile::Tile() = default;
 
-Tile::Tile(int _tile_width, sf::Color _color) {
-	tile_width = _tile_width;
-	color = _color;
+Tile::Tile(int tileWidth, sf::Color color) {
+	this->tileWidth = tileWidth;
+	this->color = color;
 	createTile();
 }
 
 void Tile::createTile() {
-	sf::RectangleShape _tile(sf::Vector2f(tile_width, tile_width));
-	_tile.setFillColor(color);
-	_tile.setOutlineThickness(2.f);
-	_tile.setOutlineColor(sf::Color(0, 0, 0));
-	_tile.setPosition(0, 0);
-	tile = _tile;
+	sf::RectangleShape tile(sf::Vector2f(tileWidth, tileWidth));
+	tile.setFillColor(color);
+	tile.setOutlineThickness(2.f);
+	tile.setOutlineColor(sf::Color(0, 0, 0));
+	tile.setPosition(0, 0);
+	this->tile = tile;
 }
 
 void Tile::setPosition(float x, float y) {
@@ -51,10 +51,10 @@ sf::Vector2f Tile::getPosition() {
 }
 
 sf::Vector2f Tile::getCenter() {
-	sf::FloatRect tile_bounds = tile.getGlobalBounds();
+	sf::FloatRect tileBounds = tile.getGlobalBounds();
 	sf::Vector2f center;
-	center.x = tile_bounds.left + tile_bounds.width / 2;
-	center.y = tile_bounds.top + tile_bounds.height / 2;
+	center.x = tileBounds.left + tileBounds.width / 2;
+	center.y = tileBounds.top + tileBounds.height / 2;
 	return center;
 }
 

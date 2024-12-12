@@ -20,12 +20,12 @@ class Game
 private:
     int width = 1200;
     int height = 900;
-    int grid_width = 500;
-    int tile_width = grid_width / 10;
-    char column_labels[10];
+    int gridWidth = 500;
+    int tileWidth = gridWidth / 10;
+    char columnLabels[10];
 
-    int pos_x = 25;
-    int pos_y = 10;
+    int posX = 25;
+    int posY = 10;
     int row, col;
 
     int selShip = -1;
@@ -57,10 +57,10 @@ public:
     short int createShips();
     bool allShipsPlaced();
     int shipSel(sf::Vector2f mouse);
-    bool shipMove(sf::Vector2f mouse, int selShip, GridPlayer player_grid);
-    bool shipRotate(Ship ship, GridPlayer player_grid);
-    void updateShips(GridPlayer player_grid);
-    void checkShips(GridPlayer player_grid);
+    bool shipMove(sf::Vector2f mouse, int selShip, GridPlayer playerGrid);
+    bool shipRotate(Ship ship, GridPlayer playerGrid);
+    void updateShips(GridPlayer playerGrid);
+    void checkShips(GridPlayer playerGrid);
     void checkWin(Player& player, Player& enemy, sf::RenderWindow& window);
     bool chooseStartingPlayer();
 };

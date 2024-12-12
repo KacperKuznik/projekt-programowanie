@@ -10,14 +10,14 @@ class Tile : public sf::Drawable
 {
 private:
 	sf::RectangleShape tile;
-	int tile_width;
+	int tileWidth;
 	sf::Color color;
 	bool containsShip = false;
 	bool hit = false;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 public:
 	Tile();
-	Tile(int _tile_width, sf::Color _color);
+	Tile(int tileWidth, sf::Color color);
 	void createTile();
 	void setPosition(float x, float y);
 	sf::FloatRect getGlobalBounds();

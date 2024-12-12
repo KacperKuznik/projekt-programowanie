@@ -11,6 +11,7 @@ Button::Button(std::string txt) {
     sf::RectangleShape _box(sf::Vector2f(150, 50));
     if (!font.loadFromFile("fonts/arial.ttf"))
     {
+        std::cerr << "Failed to load font file" << std::endl;
     }
     text.setFont(font);
     _box.setFillColor(sf::Color::Blue);
@@ -26,13 +27,12 @@ Button::Button(std::string txt) {
     text.setFillColor(sf::Color::White);
 }
 
-const bool Button::isClicked(const sf::Vector2f mouse)
-{
+const bool Button::isClicked(const sf::Vector2f mouse) {
     if (!event.type == sf::Event::MouseButtonPressed) {
         return false;
     }
     if (box.getGlobalBounds().contains(mouse)) {
-        soundmanager.click();
+        soundManager.click();
         return true;
     }
     return false;

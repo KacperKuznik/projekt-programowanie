@@ -2,31 +2,31 @@
 
 Player::Player() = default;
 
-Player::Player(short int _count) {
-	player_turn = false;
-	tiles_count = _count;
+Player::Player(short int count) {
+    playerTurn = false;
+    tilesCount = count;
 }
 
 void Player::hit() {
-	tiles_count--;
+    tilesCount--;
 }
 
 short int Player::getTilesCount() {
-	return tiles_count;
+    return tilesCount;
 }
 
-void Player::setTilesCount(short int _count) {
-	tiles_count = _count;
+void Player::setTilesCount(short int count) {
+    tilesCount = count;
 }
 
 void Player::changeTurn() {
-	player_turn = !player_turn;
+    playerTurn = !playerTurn;
 }
 
-void Player::setTurn(bool _player_turn) {
-	player_turn = _player_turn;
+void Player::setTurn(bool playerTurn) {
+    this->playerTurn = playerTurn;
 }
 
 bool Player::isPlayerTurn() {
-	return player_turn;
+    return playerTurn;
 }

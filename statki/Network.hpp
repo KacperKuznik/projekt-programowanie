@@ -10,8 +10,8 @@ private:
     sf::Packet packet;
     sf::IpAddress sender;
     unsigned short port;
-    unsigned short receiver_port;
-    sf::IpAddress receiver_ip;
+    unsigned short receiverPort;
+    sf::IpAddress receiverIp;
 public:
     struct Result {
         sf::Socket::Status status;
@@ -19,8 +19,8 @@ public:
     };
     Network();
     Result listen();
-    void set_reciever_port(unsigned short _receiver_port);
-    void set_reciever_ip(sf::String _receiver_ip);
+    void setReceiverPort(unsigned short receiverPort);
+    void setReceiverIp(sf::String receiverIp);
     void send(int row, int col);
     void connect(bool isStarting);
     void reply(bool isHit);

@@ -1,15 +1,15 @@
 #include "Grid.hpp"
 
 Grid::Grid(int width, int x, int y) {
-	int tile_width = width / rows;
+	int tileWidth = width / rows;
 	tiles = new Tile * [rows];
 
 	for (int row = 0; row < rows; row++) {
 		tiles[row] = new Tile[cols];
 
 		for (int col = 0; col < cols; col++) {
-			Tile tile(tile_width, tile_color);
-			tile.setPosition(x + tile_width * row, y + tile_width * col);
+			Tile tile(tileWidth, tileColor);
+			tile.setPosition(x + tileWidth * row, y + tileWidth * col);
 			tiles[row][col] = tile;
 		}
 	}

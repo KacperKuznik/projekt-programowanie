@@ -9,7 +9,11 @@ void Game::startMenu() {
 
     sf::RenderWindow window(sf::VideoMode(width, height), "menu");
 
-    bgMenu.loadFromFile("img/mainbg.jpg");
+    if (!bgMenu.loadFromFile("img/mainbg.jpg"))
+    {
+        std::cerr << "Failed to load background image" << std::endl;
+    }
+
     bg.setTexture(bgMenu);
     while (window.isOpen())
     {
@@ -34,8 +38,6 @@ void Game::startMenu() {
                         window.close();
                         hostMenu();
                     }
-
-
                 }
             }
         }
@@ -125,10 +127,10 @@ void Game::joinMenu() {
                     }
 
                     if (joinConfButton.isClicked(mouse)) {
-                        std::string portstr = portText.getString();
-                        int portnumber = std::stoi(portstr);
-                        network.set_reciever_port(portnumber);
-                        network.set_reciever_ip(ipText.getString());
+                        std::string portStr = portText.getString();
+                        int portNumber = std::stoi(portStr);
+                        network.setReceiverPort(portNumber);
+                        network.setReceiverIp(ipText.getString());
                         bool starting = chooseStartingPlayer();
                         player.setTurn(starting);
                         network.connect(!starting);
@@ -199,8 +201,6 @@ void Game::joinMenu() {
                     }
                     break;
                 }
-
-
             }
         }
         window.clear(sf::Color::White);
@@ -220,9 +220,9 @@ void Game::hostMenu() {
     bgMenu.loadFromFile("img/mainbg.jpg");
     bg.setTexture(bgMenu);
 
-    sf::IpAddress hostIP;
+    sf::IpAddress hostIp;
     std::cout << "\n Checking your IP address...";
-    std::cout << "\n Hosting game at IP address: " << hostIP.getLocalAddress();
+    std::cout << "\n Hosting game at IP address: " << hostIp.getLocalAddress();
 
     std::cout << "\n Checking your port number...";
     std::cout << "\n Hosting game at port number: " << network.getPort();
@@ -236,15 +236,13 @@ void Game::hostMenu() {
     ipTextH.setCharacterSize(50);
     ipTextH.setFillColor(sf::Color::Black);
     ipTextH.setPosition(400, 50);
-    ipTextH.setString(hostIP.getLocalAddress().toString());
+    ipTextH.setString(hostIp.getLocalAddress().toString());
 
     portTextH.setFont(font);
     portTextH.setCharacterSize(50);
     portTextH.setFillColor(sf::Color::Black);
     portTextH.setPosition(450, 150);
     portTextH.setString(std::to_string(network.getPort()));
-
-
 
     while (window.isOpen())
     {
@@ -294,13 +292,12 @@ void Game::run() {
     text.setPosition(sf::Vector2f(width / 2.0f, height / 2.0f));
 
     std::cout << "\n Creating ships...";
-    short int ship_tiles_count;
-    ship_tiles_count = createShips();
+    short int shipTilesCount;
+    shipTilesCount = createShips();
 
-    player.setTilesCount(ship_tiles_count);
-    Player enemy(ship_tiles_count);
+    player.setTilesCount(shipTilesCount);
+    Player enemy(shipTilesCount);
     std::cout << "\n Choosing side... ";
-
 
     Button startButton("START");
     std::cout << "\n Rendering game window...";
@@ -308,10 +305,10 @@ void Game::run() {
     sf::RenderWindow window(sf::VideoMode(width, height), "statki");
 
     std::cout << "\n Creating player grid...";
-    GridPlayer player_grid(grid_width, pos_x, pos_y);
+    GridPlayer playerGrid(gridWidth, posX, posY);
 
     std::cout << "\n Creating enemy grid...";
-    GridEnemy enemy_grid(grid_width, pos_x + grid_width + 3 * tile_width, pos_y);
+    GridEnemy enemyGrid(gridWidth, posX + gridWidth + 3 * tileWidth, posY);
 
     std::cout << "\n Loading finished!";
     while (window.isOpen())
@@ -319,7 +316,7 @@ void Game::run() {
         auto result = network.listen();
         if (result.status == 0) {
             result.packet >> row >> col;
-            player_grid.mark(row, col, ships, network, player);
+            playerGrid.mark(row, col, ships, network, player);
         }
 
         sf::Event event;
@@ -344,22 +341,22 @@ void Game::run() {
                             selShip = shipSel(mouse);
                         }
                         else {
-                            if (shipMove(mouse, selShip, player_grid) == EXIT_SUCCESS) {
+                            if (shipMove(mouse, selShip, playerGrid) == EXIT_SUCCESS) {
                                 selShip = -1;
                             }
                         }
-                        updateShips(player_grid);
-                        checkShips(player_grid);
+                        updateShips(playerGrid);
+                        checkShips(playerGrid);
                     }
                     else {
                         if (player.isPlayerTurn())
-                            enemy_grid.shoot(mouse, network, enemy, player);
+                            enemyGrid.shoot(mouse, network, enemy, player);
                     }
                 }
                 else if (event.mouseButton.button == sf::Mouse::Right) {
 
                     if (shipIsSelected == true) {
-                        ships[selShip].setRot(shipRotate(ships[selShip], player_grid));
+                        ships[selShip].setRot(shipRotate(ships[selShip], playerGrid));
                     }
                 }
             }
@@ -367,8 +364,8 @@ void Game::run() {
 
         window.clear(sf::Color::White);
         checkWin(player, enemy, window);
-        player_grid.drawGrid(window);
-        enemy_grid.drawGrid(window);
+        playerGrid.drawGrid(window);
+        enemyGrid.drawGrid(window);
         for (Ship ship : ships)
             ship.drawShip(window);
         window.draw(text);
@@ -391,18 +388,17 @@ void Game::displayTurnText(sf::RenderWindow& window, bool isPlayerTurn) {
 }
 
 short int Game::createShips() {
-    short int ship_tiles_count = 0;
+    short int shipTilesCount = 0;
     int n = 4;
     for (int i = 1; i <= 4; i++) {
         for (int j = 0; j < n; j++) {
-            Ship ship(i, pos_x + tile_width * (i + 1) * j, pos_y + grid_width + tile_width * i + tile_width * (i - 1) / 2);
+            Ship ship(i, posX + tileWidth * (i + 1) * j, posY + gridWidth + tileWidth * i + tileWidth * (i - 1) / 2);
             ships.push_back(ship);
-            ship_tiles_count += i;
+            shipTilesCount += i;
         }
         n--;
     }
-    return ship_tiles_count;
-
+    return shipTilesCount;
 }
 
 bool Game::allShipsPlaced() {
@@ -426,10 +422,10 @@ int Game::shipSel(sf::Vector2f mouse) {
     return -1;
 }
 
-bool Game::shipMove(sf::Vector2f mouse, int selShip, GridPlayer player_grid) {
+bool Game::shipMove(sf::Vector2f mouse, int selShip, GridPlayer playerGrid) {
     ships[selShip].setShipToPlaced();
     bool moveNotPossible = false;
-    auto pos = player_grid.getClickedPosition(mouse);
+    auto pos = playerGrid.getClickedPosition(mouse);
     if (ships[selShip].getRot() == 0) {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= ships[selShip].size(); j++) {
@@ -437,9 +433,9 @@ bool Game::shipMove(sf::Vector2f mouse, int selShip, GridPlayer player_grid) {
                 if (pos.row + j < 0 || pos.row + j >= 10 || pos.col + i >= 10 || pos.col + i < 0) {
                     continue;
                 }
-                else if (player_grid.getTiles()[pos.row + j][pos.col + i].checkShipContent() == true) {
+                else if (playerGrid.getTiles()[pos.row + j][pos.col + i].checkShipContent() == true) {
                     for (int k = 0; k < ships[selShip].size(); k++) {
-                        if (player_grid.getTiles()[pos.row + j][pos.col + i].getGlobalBounds().contains(ships[selShip].getTile(k).getPosition())) {
+                        if (playerGrid.getTiles()[pos.row + j][pos.col + i].getGlobalBounds().contains(ships[selShip].getTile(k).getPosition())) {
                             selfFound = true;
                             break;
                         }
@@ -462,9 +458,9 @@ bool Game::shipMove(sf::Vector2f mouse, int selShip, GridPlayer player_grid) {
                 if (pos.row + j < 0 || pos.row + j >= 10 || pos.col + i >= 10 || pos.col + i < 0) {
                     continue;
                 }
-                else if (player_grid.getTiles()[pos.row + j][pos.col + i].checkShipContent() == true) {
+                else if (playerGrid.getTiles()[pos.row + j][pos.col + i].checkShipContent() == true) {
                     for (int k = 0; k < ships[selShip].size(); k++) {
-                        if (player_grid.getTiles()[pos.row + j][pos.col + i].getGlobalBounds().contains(ships[selShip].getTile(k).getPosition())) {
+                        if (playerGrid.getTiles()[pos.row + j][pos.col + i].getGlobalBounds().contains(ships[selShip].getTile(k).getPosition())) {
                             selfFound = true;
                             break;
                         }
@@ -484,46 +480,44 @@ bool Game::shipMove(sf::Vector2f mouse, int selShip, GridPlayer player_grid) {
         return EXIT_FAILURE;
     }
     else {
-        player_grid.placeShip(ships[selShip], mouse);
+        playerGrid.placeShip(ships[selShip], mouse);
         ships[selShip].chColor(sf::Color::Blue);
         return EXIT_SUCCESS;
     }
 }
 
-bool Game::shipRotate(Ship ship, GridPlayer player_grid) {
-    if (player_grid.canBeRotated(ship) == 0) {
+bool Game::shipRotate(Ship ship, GridPlayer playerGrid) {
+    if (playerGrid.canBeRotated(ship) == 0) {
         return ship.chRot();
     }
     else {
         return ship.getRot();
-
     }
-
 }
 
-void Game::updateShips(GridPlayer player_grid) {
-    for (int i = 0; i < player_grid.getRows(); i++) {
-        for (int j = 0; j < player_grid.getCols(); j++) {
-            player_grid.getTiles()[j][i].chgShipContent(false);
+void Game::updateShips(GridPlayer playerGrid) {
+    for (int i = 0; i < playerGrid.getRows(); i++) {
+        for (int j = 0; j < playerGrid.getCols(); j++) {
+            playerGrid.getTiles()[j][i].chgShipContent(false);
         }
     }
     for (int i = 0; i < ships.size(); i++) {
         if (ships[i].checkPlacedState() == true)
         {
-            for (int j = 0; j < player_grid.getRows(); j++) {
-                for (int k = 0; k < player_grid.getCols(); k++) {
-                    if (player_grid.getTiles()[j][k].getGlobalBounds().contains(ships[i].getTile(0).getCenter())) {
+            for (int j = 0; j < playerGrid.getRows(); j++) {
+                for (int k = 0; k < playerGrid.getCols(); k++) {
+                    if (playerGrid.getTiles()[j][k].getGlobalBounds().contains(ships[i].getTile(0).getCenter())) {
                         bool rotation = ships[i].getRot();
                         int size = ships[i].size();
                         if (rotation == 0) {
                             for (int l = 0; l < size; l++) {
-                                player_grid.getTiles()[j + l][k].chgShipContent(true);
+                                playerGrid.getTiles()[j + l][k].chgShipContent(true);
                             }
                         }
                         else
                         {
                             for (int l = 0; l < size; l++) {
-                                player_grid.getTiles()[j][k + l].chgShipContent(true);
+                                playerGrid.getTiles()[j][k + l].chgShipContent(true);
                             }
                         }
                     }
@@ -533,12 +527,12 @@ void Game::updateShips(GridPlayer player_grid) {
     }
 }
 
-void Game::checkShips(GridPlayer player_grid) {
+void Game::checkShips(GridPlayer playerGrid) {
     //DEV method. NOT FOR COMMERCIAL USE!
     std::cout << "------------------------------------" << std::endl;
-    for (int i = 0; i < player_grid.getRows(); i++) {
-        for (int j = 0; j < player_grid.getCols(); j++) {
-            if (player_grid.getTiles()[j][i].checkShipContent() == true) {
+    for (int i = 0; i < playerGrid.getRows(); i++) {
+        for (int j = 0; j < playerGrid.getCols(); j++) {
+            if (playerGrid.getTiles()[j][i].checkShipContent() == true) {
                 std::cout << "X ";
             }
             else
@@ -555,15 +549,14 @@ void Game::checkWin(Player& player, Player& enemy, sf::RenderWindow& window) {
     if (player.getTilesCount() == 0) {
         text.setString("lost");
         text.setFillColor(sf::Color::Red);
-
     }
     else if (enemy.getTilesCount() == 0) {
         text.setString("won");
         text.setFillColor(sf::Color::Green);
-
     }
 }
 
 bool Game::chooseStartingPlayer() {
     return (rand() > (RAND_MAX / 2));
 }
+

@@ -7,12 +7,12 @@ class Ship
 {
 private:
 	short int length = 1;
-	int tile_width = 50;
+	int tileWidth = 50;
 
 	bool rotation = 0;
 	bool isPlaced = false;
 
-	Tile* ship_tiles;
+	Tile* shipTiles;
 	sf::Color shipColor = sf::Color(0, 255, 0);
 	sf::Color shipHitColor = sf::Color(200, 0, 0);
 	sf::Color shipSunkColor = sf::Color(255, 0, 0);

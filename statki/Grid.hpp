@@ -18,9 +18,9 @@ private:
 	};
 protected:
 	Tile** tiles;
-	sf::Color tile_color = sf::Color(240, 240, 240);
-	sf::Color missed_shot_color = sf::Color(200, 200, 200);
-	SoundManager soundmanager;
+	sf::Color tileColor = sf::Color(240, 240, 240);
+	sf::Color missedShotColor = sf::Color(200, 200, 200);
+	SoundManager soundManager;
 public:
 	Grid(int width, int x, int y);
 	Tile** getTiles();
