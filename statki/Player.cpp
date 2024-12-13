@@ -1,32 +1,32 @@
-#pragma once
-#include <iostream>
-class Player 
-{
-private:
-	short int tiles_count;
-	bool player_turn;
-public:
-	Player() = default;
-	Player(short int _count) {
-		player_turn = false;
-		tiles_count = _count;
-	}
-	void hit() {
-		tiles_count--;	
-	}
-	short int getTilesCount() {
-		return tiles_count;
-	}
-	void setTilesCount(short int _count) {
-		tiles_count = _count;
-	}
-	void changeTurn() {
-		player_turn = !player_turn;
-	}
-	void setTurn(bool _player_turn) {
-		player_turn = _player_turn;
-	}
-	bool isPlayerTurn() {
-		return player_turn;
-	}
-};
+#include "Player.hpp"
+
+Player::Player() = default;
+
+Player::Player(short int count) {
+    playerTurn = false;
+    tilesCount = count;
+}
+
+void Player::hit() {
+    tilesCount--;
+}
+
+short int Player::getTilesCount() {
+    return tilesCount;
+}
+
+void Player::setTilesCount(short int count) {
+    tilesCount = count;
+}
+
+void Player::changeTurn() {
+    playerTurn = !playerTurn;
+}
+
+void Player::setTurn(bool playerTurn) {
+    this->playerTurn = playerTurn;
+}
+
+bool Player::isPlayerTurn() {
+    return playerTurn;
+}

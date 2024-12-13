@@ -1,115 +1,95 @@
-#pragma once
-#include "tile.cpp"
-#include <iostream>
+#include "Ship.hpp"
 
-class Ship
-{
-private:
-	short int length  = 1;
-	int tile_width = 50;
+Ship::Ship(short int _length, int x, int y) {
+    length = _length;
+    shipTiles = new Tile[length];
 
-	bool rotation = 0;
-	bool isPlaced = false;
+    for (int i = 0; i < length; i++) {
+        Tile tile(tileWidth, shipColor);
+        tile.setPosition(x + tileWidth * i, y);
+        shipTiles[i] = tile;
+    }
+}
 
-	Tile* ship_tiles;
-	sf::Color shipColor = sf::Color(0, 255, 0);
-	sf::Color shipHitColor = sf::Color(200, 0, 0);
-	sf::Color shipSunkColor = sf::Color(255,0,0);
-public:
-	Ship(short int _length, int x, int y) {
-		length = _length;
-		ship_tiles = new Tile[length];
-		
-		for (int i = 0; i < length; i++) {
-			Tile tile(tile_width, shipColor);
-			tile.setPosition(x + tile_width * i, y);
-			ship_tiles[i] = tile;
+void Ship::drawShip(sf::RenderWindow& window) {
+    for (int i = 0; i < length; i++) {
+        window.draw(shipTiles[i]);
+    }
+}
 
-		}
+Tile Ship::getTile(int i) {
+    return shipTiles[i];
+}
 
-	}
-	void drawShip(sf::RenderWindow& window) {
-		
+void Ship::chColor(sf::Color color) {
+    for (int i = 0; i < length; i++) {
+        shipTiles[i].setFillColor(color);
+    }
+}
 
-		for (int i = 0; i < length; i++) {
+void Ship::hit(int i) {
+    if (!shipTiles[i].isHit()) {
+        shipTiles[i].setFillColor(shipHitColor);
+        shipTiles[i].setHit();
+        isSunk();
+    }
+}
 
-		window.draw(ship_tiles[i]);
-	
-		}
-	}
+int Ship::size() {
+    return length;
+}
 
-	Tile getTile(int i) {
-		return ship_tiles[i];
-	}
+bool Ship::isSunk() {
+    for (int i = 0; i < length; i++) {
+        if (!shipTiles[i].isHit()) {
+            return false;
+        }
+    }
+    chColor(shipSunkColor);
+    return true;
+}
 
-	void chColor(sf::Color color) {
-		for (int i = 0; i < length; i++) {
-			ship_tiles[i].setFillColor(color);
-		}
-	}
-	void hit(int i) {
-		if (!ship_tiles[i].isHit()) {
-			ship_tiles[i].setFillColor(shipHitColor);
-			ship_tiles[i].setHit();
-			isSunk();
-		}
-	}
+void Ship::setPos(sf::Vector2f position) {
+    if (rotation == 0) {
+        for (int i = 0; i < length; i++) {
+            shipTiles[i].setPosition(position.x + tileWidth * i, position.y);
+        }
+    }
+    else {
+        for (int i = 0; i < length; i++) {
+            shipTiles[i].setPosition(position.x, position.y + tileWidth * i);
+        }
+    }
+}
 
-	int size() {
-		return length;
-	}
-	bool isSunk() {
-		for (int i = 0; i < length; i++) {
-			if (!ship_tiles[i].isHit()) {
-				return false;
-			}
-		}
-		chColor(shipSunkColor);
-		return true;
-	}
+int Ship::chRot() {
+    sf::Vector2f position = shipTiles[0].getPosition();
+    if (rotation == 0) {
+        for (int i = 0; i < length; i++) {
+            shipTiles[i].setPosition(position.x, position.y + tileWidth * i);
+        }
+        return 1;
+    }
+    else {
+        for (int i = 0; i < length; i++) {
+            shipTiles[i].setPosition(position.x + tileWidth * i, position.y);
+        }
+        return 0;
+    }
+}
 
-	void setPos(sf::Vector2f position) {
-		if (rotation == 0) {
-			for (int i = 0; i < length; i++) {
-				ship_tiles[i].setPosition(position.x + tile_width * i, position.y);
-			}
-		}
-		else {
-			for (int i = 0; i < length; i++) {
-				ship_tiles[i].setPosition(position.x, position.y + tile_width * i);
-			}
-		}
-	}
+bool Ship::getRot() {
+    return rotation;
+}
 
-	int chRot() {
-		sf::Vector2f position = ship_tiles[0].getPosition();
-		if (rotation == 0) {
-			for (int i = 0; i < length; i++) {
-				ship_tiles[i].setPosition(position.x, position.y + tile_width * i);
-			}
-			return 1;
-			
-		}
-		else {
-			for (int i = 0; i < length; i++) {
-				ship_tiles[i].setPosition(position.x + tile_width * i, position.y);
-			}
-			return 0;
-		}
-	}
+void Ship::setRot(bool _rotation) {
+    rotation = _rotation;
+}
 
-	bool getRot() {
-		return rotation;
-	}
+void Ship::setShipToPlaced() {
+    isPlaced = true;
+}
 
-	void setRot(bool _rotation) {
-		rotation = _rotation;
-	}
-
-	void setShipToPlaced() {
-		isPlaced = true;
-	}
-	bool checkPlacedState() {
-		return isPlaced;
-	}
-};
+bool Ship::checkPlacedState() {
+    return isPlaced;
+}

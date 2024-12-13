@@ -1,24 +1,20 @@
-#pragma once
-#include <SFML/Audio.hpp>
-#include <iostream>
-class SoundManager
-{
-private:
-    sf::SoundBuffer shoot_buffer;
-    sf::Sound shoot_sound;
-    sf::SoundBuffer click_buffer;
-    sf::Sound click_sound;
-public:
-    SoundManager() {
-        shoot_buffer.loadFromFile("sound/sus.wav");
-        click_buffer.loadFromFile("sound/click.wav");
+#include "SoundManager.hpp"
+
+SoundManager::SoundManager() {
+    if (!shootBuffer.loadFromFile("sound/sus.wav")) {
+        std::cerr << "Failed to load shoot sound" << std::endl;
     }
-    void shoot() {
-        shoot_sound.setBuffer(shoot_buffer);
-        shoot_sound.play();
+    if (!clickBuffer.loadFromFile("sound/click.wav")) {
+        std::cerr << "Failed to load click sound" << std::endl;
     }
-    void click() {
-        click_sound.setBuffer(click_buffer);
-        click_sound.play();
-    }
-};
+}
+
+void SoundManager::shoot() {
+    shootSound.setBuffer(shootBuffer);
+    shootSound.play();
+}
+
+void SoundManager::click() {
+    clickSound.setBuffer(clickBuffer);
+    clickSound.play();
+}

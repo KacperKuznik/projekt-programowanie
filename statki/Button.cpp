@@ -1,63 +1,49 @@
-#pragma once
-#include <SFML/Graphics.hpp>
-#include <string>
-#include "SoundManager.cpp"
+#include "Button.hpp"
 
-class Button : public sf::Drawable
-{
-private:
-	sf::RectangleShape box;
-    sf::Text text;
-    sf::Event event;
-    sf::Font font;
-    SoundManager soundmanager;
+void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+    target.draw(box, states);
+    target.draw(text, states);
+}
 
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
+Button::Button(std::string txt) {
+    x = 500;
+    y = 800;
+    sf::RectangleShape _box(sf::Vector2f(150, 50));
+    if (!font.loadFromFile("fonts/arial.ttf"))
     {
-        target.draw(box, states);
-        target.draw(text, states);
+        std::cerr << "Failed to load font file" << std::endl;
     }
-    float x, y;
+    text.setFont(font);
+    _box.setFillColor(sf::Color::Blue);
+    _box.setOutlineThickness(2.f);
+    _box.setOutlineColor(sf::Color(0, 0, 0));
+    _box.setPosition(x, y);
+    box = _box;
 
-public:
-    Button(std::string txt) {
-        x = 500;
-        y = 800;
-        sf::RectangleShape _box(sf::Vector2f(150, 50));
-        if (!font.loadFromFile("fonts/arial.ttf"))
-        {
-        }
-        text.setFont(font);
-        _box.setFillColor(sf::Color::Blue);
-        _box.setOutlineThickness(2.f);
-        _box.setOutlineColor(sf::Color(0, 0, 0));
-        _box.setPosition(x, y);
-        box = _box;
+    text.setFont(font);
+    text.setCharacterSize(50 * 0.75);
+    text.setPosition(x, y);
+    text.setString(txt);
+    text.setFillColor(sf::Color::White);
+}
 
-        text.setFont(font);
-        text.setCharacterSize(50*0.75);
-        text.setPosition(x, y);
-        text.setString(txt);
-        text.setFillColor(sf::Color::White);
-    }
-    const bool isClicked(const sf::Vector2f mouse)
-    {
-        if (!event.type == sf::Event::MouseButtonPressed) {
-            return false;
-        }
-        if (box.getGlobalBounds().contains(mouse)) {
-            soundmanager.click();
-            return true;
-        }
+const bool Button::isClicked(const sf::Vector2f mouse) {
+    if (!event.type == sf::Event::MouseButtonPressed) {
         return false;
     }
-    void changeButton(std::string txt = "", sf::Color color = sf::Color::Blue) {
-        text.setString(txt);
-        box.setFillColor(color);
+    if (box.getGlobalBounds().contains(mouse)) {
+        soundManager.click();
+        return true;
     }
+    return false;
+}
 
-    void chPos(float x, float y) {
-        box.setPosition(x, y);
-        text.setPosition(x, y);
-    }
-};
+void Button::changeButton(std::string txt, sf::Color color) {
+    text.setString(txt);
+    box.setFillColor(color);
+}
+
+void Button::chPos(float x, float y) {
+    box.setPosition(x, y);
+    text.setPosition(x, y);
+}
