@@ -48,6 +48,30 @@ private:
     Player player;
 
     bool started = false;
+
+    enum paarameters {
+        INIT_HOST_BTN_X_POS = 525,
+        INIT_HOST_BTN_Y_POS = 200,
+        INIT_JOIN_BTN_X_POS = 525,
+        INIT_JOIN_BTN_Y_POS = 350,
+
+        CHAR_SIZE = 50,
+
+        INIT_IP_TEXT_X_POS = 400,
+        INIT_IP_TEXT_Y_POS = 50,
+        INIT_PORT_TEXT_X_POS = 400,
+        INIT_PORT_TEXT_Y_POS = 150,
+        INIT_JOIN_CONF_BTN_X_POS = 525,
+        INIT_JOIN_CONF_BTN_Y_POS = 300,
+
+        INIT_IP_BOX_X_POS = 395,
+        INIT_IP_BOX_Y_POS = 50,
+        INIT_IP_BOX_OUTLINE_THICKNESS = 5,
+
+        INIT_PORT_BOX_X_POS = 395,
+        INIT_PORT_BOX_Y_POS = 150,
+        INIT_PORT_BOX_OUTLINE_THICKNESS = 5
+    };
 public:
     void startMenu();
     void joinMenu();

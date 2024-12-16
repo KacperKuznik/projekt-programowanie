@@ -2,10 +2,10 @@
 
 void Game::startMenu() {
     Button hostButton("HOST");
-    hostButton.chPos(525, 200);
+    hostButton.chPos(INIT_HOST_BTN_X_POS, INIT_HOST_BTN_Y_POS);
 
     Button joinButton("JOIN");
-    joinButton.chPos(525, 350);
+    joinButton.chPos(INIT_JOIN_BTN_X_POS, INIT_JOIN_BTN_Y_POS);
 
     sf::RenderWindow window(sf::VideoMode(width, height), "menu");
 
@@ -56,17 +56,17 @@ void Game::joinMenu() {
     {
     }
     ipText.setFont(font);
-    ipText.setCharacterSize(50);
+    ipText.setCharacterSize(CHAR_SIZE);
     ipText.setFillColor(sf::Color::Black);
-    ipText.setPosition(400, 50);
+    ipText.setPosition(INIT_IP_TEXT_X_POS, INIT_IP_TEXT_Y_POS);
 
     portText.setFont(font);
-    portText.setCharacterSize(50);
+    portText.setCharacterSize(CHAR_SIZE);
     portText.setFillColor(sf::Color::Black);
-    portText.setPosition(400, 150);
+    portText.setPosition(INIT_PORT_TEXT_X_POS, INIT_PORT_TEXT_Y_POS);
 
     Button joinConfButton("Join");
-    joinConfButton.chPos(525, 300);
+    joinConfButton.chPos(INIT_JOIN_CONF_BTN_X_POS, INIT_JOIN_CONF_BTN_Y_POS);
 
     bgMenu.loadFromFile("img/mainbg.jpg");
     bg.setTexture(bgMenu);
@@ -74,16 +74,16 @@ void Game::joinMenu() {
     sf::RectangleShape ipInputBox(sf::Vector2f(400, 60));
 
     ipInputBox.setFillColor(sf::Color::White);
-    ipInputBox.setOutlineThickness(5);
+    ipInputBox.setOutlineThickness(INIT_IP_BOX_OUTLINE_THICKNESS);
     ipInputBox.setOutlineColor(sf::Color::Black);
-    ipInputBox.setPosition(395, 50);
+    ipInputBox.setPosition(INIT_IP_BOX_X_POS, INIT_IP_BOX_Y_POS);
 
     sf::RectangleShape portInputBox(sf::Vector2f(400, 60));
 
     portInputBox.setFillColor(sf::Color::White);
-    portInputBox.setOutlineThickness(5);
+    portInputBox.setOutlineThickness(INIT_PORT_BOX_OUTLINE_THICKNESS);
     portInputBox.setOutlineColor(sf::Color::Black);
-    portInputBox.setPosition(395, 150);
+    portInputBox.setPosition(INIT_PORT_BOX_X_POS, INIT_PORT_BOX_X_POS);
 
     unsigned int boxSelected = 0;
     sf::IpAddress joinIp;
@@ -226,22 +226,22 @@ void Game::hostMenu() {
     std::cout << "\n Checking your port number...";
     std::cout << "\n Hosting game at port number: " << network.getPort();
 
-    sf::Text ipTextH;
-    sf::Text portTextH;
+    sf::Text ipText;
+    sf::Text portText;
     if (!font.loadFromFile("fonts/arial.ttf"))
     {
     }
-    ipTextH.setFont(font);
-    ipTextH.setCharacterSize(50);
-    ipTextH.setFillColor(sf::Color::Black);
-    ipTextH.setPosition(400, 50);
-    ipTextH.setString(hostIp.getLocalAddress().toString());
+    ipText.setFont(font);
+    ipText.setCharacterSize(CHAR_SIZE);
+    ipText.setFillColor(sf::Color::Black);
+    ipText.setPosition(INIT_IP_TEXT_X_POS, INIT_IP_TEXT_Y_POS);
+    ipText.setString(hostIp.getLocalAddress().toString());
 
-    portTextH.setFont(font);
-    portTextH.setCharacterSize(50);
-    portTextH.setFillColor(sf::Color::Black);
-    portTextH.setPosition(450, 150);
-    portTextH.setString(std::to_string(network.getPort()));
+    portText.setFont(font);
+    portText.setCharacterSize(CHAR_SIZE);
+    portText.setFillColor(sf::Color::Black);
+    portText.setPosition(INIT_PORT_TEXT_X_POS, INIT_PORT_TEXT_Y_POS);
+    portText.setString(std::to_string(network.getPort()));
 
     while (window.isOpen())
     {
@@ -263,8 +263,8 @@ void Game::hostMenu() {
         }
         window.clear(sf::Color::White);
         window.draw(bg);
-        window.draw(ipTextH);
-        window.draw(portTextH);
+        window.draw(ipText);
+        window.draw(portText);
         window.display();
     }
 }
@@ -527,7 +527,6 @@ void Game::updateShips(GridPlayer playerGrid) {
 }
 
 void Game::checkShips(GridPlayer playerGrid) {
-    //DEV method. NOT FOR COMMERCIAL USE!
     std::cout << "------------------------------------" << std::endl;
     for (int i = 0; i < playerGrid.getRows(); i++) {
         for (int j = 0; j < playerGrid.getCols(); j++) {
