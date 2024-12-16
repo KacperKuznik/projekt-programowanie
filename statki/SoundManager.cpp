@@ -9,6 +9,11 @@ SoundManager::SoundManager() {
     }
 }
 
+SoundManager::~SoundManager() {
+    shootSound.stop();
+    clickSound.stop();
+}
+
 void SoundManager::shoot() {
     shootSound.setBuffer(shootBuffer);
     shootSound.play();

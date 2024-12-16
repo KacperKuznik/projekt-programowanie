@@ -17,7 +17,6 @@ void Game::startMenu() {
     bg.setTexture(bgMenu);
     while (window.isOpen())
     {
-
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -349,7 +348,7 @@ void Game::run() {
                         checkShips(playerGrid);
                     }
                     else {
-                        if (player.isPlayerTurn())
+                        if (player)
                             enemyGrid.shoot(mouse, network, enemy, player);
                     }
                 }
@@ -366,11 +365,11 @@ void Game::run() {
         checkWin(player, enemy, window);
         playerGrid.drawGrid(window);
         enemyGrid.drawGrid(window);
-        for (Ship ship : ships)
+        for (Ship<Tile> ship : ships)
             ship.drawShip(window);
         window.draw(text);
         window.draw(startButton);
-        displayTurnText(window, player.isPlayerTurn());
+        displayTurnText(window, player);
         window.display();
     }
 }
@@ -392,7 +391,7 @@ short int Game::createShips() {
     int n = 4;
     for (int i = 1; i <= 4; i++) {
         for (int j = 0; j < n; j++) {
-            Ship ship(i, posX + tileWidth * (i + 1) * j, posY + gridWidth + tileWidth * i + tileWidth * (i - 1) / 2);
+            Ship<Tile> ship(i, posX + tileWidth * (i + 1) * j, posY + gridWidth + tileWidth * i + tileWidth * (i - 1) / 2);
             ships.push_back(ship);
             shipTilesCount += i;
         }
@@ -486,7 +485,7 @@ bool Game::shipMove(sf::Vector2f mouse, int selShip, GridPlayer playerGrid) {
     }
 }
 
-bool Game::shipRotate(Ship ship, GridPlayer playerGrid) {
+bool Game::shipRotate(Ship<Tile> ship, GridPlayer playerGrid) {
     if (playerGrid.canBeRotated(ship) == 0) {
         return ship.chRot();
     }

@@ -11,6 +11,10 @@ Network::Network()
     socket.setBlocking(false);
 }
 
+Network::~Network() {
+    socket.unbind();
+}
+
 Network::Result Network::listen() {
     Result result;
     sf::Socket::Status status = socket.receive(result.packet, sender, port);

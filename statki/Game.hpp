@@ -44,7 +44,7 @@ private:
     sf::String ipInput;
     sf::String portInput;
 
-    std::vector< Ship > ships;
+    std::vector<Ship<Tile>> ships;
     Player player;
 
     bool started = false;
@@ -58,7 +58,7 @@ public:
     bool allShipsPlaced();
     int shipSel(sf::Vector2f mouse);
     bool shipMove(sf::Vector2f mouse, int selShip, GridPlayer playerGrid);
-    bool shipRotate(Ship ship, GridPlayer playerGrid);
+    bool shipRotate(Ship<Tile> ship, GridPlayer playerGrid);
     void updateShips(GridPlayer playerGrid);
     void checkShips(GridPlayer playerGrid);
     void checkWin(Player& player, Player& enemy, sf::RenderWindow& window);
