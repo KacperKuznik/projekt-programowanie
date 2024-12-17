@@ -18,6 +18,7 @@ public:
         sf::Packet packet;
     };
     Network();
+    ~Network();
     Result listen();
     void setReceiverPort(unsigned short receiverPort);
     void setReceiverIp(sf::String receiverIp);
