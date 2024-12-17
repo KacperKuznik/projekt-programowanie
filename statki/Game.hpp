@@ -9,11 +9,15 @@
 #include "GridEnemy.hpp"
 #include "Player.hpp"
 #include "Button.hpp"
+#include "History.hpp"
 #include <vector>
 #include <iostream>
 #include <string>
 #include <cmath>
 #include <sstream>
+#include <fstream>
+#include <filesystem>
+#include <regex>
 
 class Game
 {
@@ -49,6 +53,8 @@ private:
 
     bool started = false;
 
+    std::string history_file_name;
+
     enum paarameters {
         INIT_HOST_BTN_X_POS = 525,
         INIT_HOST_BTN_Y_POS = 200,
@@ -73,6 +79,7 @@ private:
         INIT_PORT_BOX_OUTLINE_THICKNESS = 5
     };
 public:
+    Game();
     void startMenu();
     void joinMenu();
     void hostMenu();
@@ -84,7 +91,7 @@ public:
     bool shipMove(sf::Vector2f mouse, int selShip, GridPlayer playerGrid);
     bool shipRotate(Ship<Tile> ship, GridPlayer playerGrid);
     void updateShips(GridPlayer playerGrid);
-    void checkShips(GridPlayer playerGrid);
-    void checkWin(Player& player, Player& enemy, sf::RenderWindow& window);
+    int checkWin(Player& player, Player& enemy, sf::RenderWindow& window);
     bool chooseStartingPlayer();
+    static void printState(GridPlayer playerGrid, std::string history_file_name);
 };
