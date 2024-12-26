@@ -403,12 +403,9 @@ short int Game::createShips() {
 }
 
 bool Game::allShipsPlaced() {
-    for (int i = 0; i < ships.size(); i++) {
-        if (!ships[i].checkPlacedState()) {
-            return false;
-        }
-    }
-    return true;
+    return std::all_of(ships.begin(), ships.end(), [](const auto& ship) {
+        return ship.checkPlacedState();
+    });
 }
 
 int Game::shipSel(sf::Vector2f mouse) {
