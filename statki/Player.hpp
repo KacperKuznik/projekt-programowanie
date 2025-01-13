@@ -16,4 +16,5 @@ public:
 	void changeTurn();
 	void setTurn(bool _playerTurn);
 	bool isPlayerTurn();
+	operator bool();
 };

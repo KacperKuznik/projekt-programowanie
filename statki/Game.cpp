@@ -1,23 +1,33 @@
 #include "Game.hpp"
 
+Game::Game() {
+    history_file_name = History::findFileName();
+
+    std::ofstream file(history_file_name);
+    
+    if (!file) {
+        std::cerr << "Error: Could not open the file for clearing." << std::endl;
+    }
+
+    file.close();
+}
+
 void Game::startMenu() {
     Button hostButton("HOST");
-    hostButton.chPos(525, 200);
+    hostButton.chPos(INIT_HOST_BTN_X_POS, INIT_HOST_BTN_Y_POS);
 
     Button joinButton("JOIN");
-    joinButton.chPos(525, 350);
+    joinButton.chPos(INIT_JOIN_BTN_X_POS, INIT_JOIN_BTN_Y_POS);
 
     sf::RenderWindow window(sf::VideoMode(width, height), "menu");
 
-    if (!bgMenu.loadFromFile("img/mainbg.jpg"))
-    {
-        std::cerr << "Failed to load background image" << std::endl;
+    if (!bgMenu.loadFromFile("img/mainbg.jpg")) {
+        std::cerr << "Error: Failed to load background image" << std::endl;
     }
 
     bg.setTexture(bgMenu);
     while (window.isOpen())
     {
-
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -53,38 +63,43 @@ void Game::joinMenu() {
     sf::RenderWindow window(sf::VideoMode(width, height), "Dolaczanie");
     sf::Text ipText;
     sf::Text portText;
-    if (!font.loadFromFile("fonts/arial.ttf"))
-    {
+
+    if (!font.loadFromFile("fonts/arial.ttf")) {
+        std::cerr << "Error: Failed to load text font" << std::endl;
     }
+
     ipText.setFont(font);
-    ipText.setCharacterSize(50);
+    ipText.setCharacterSize(CHAR_SIZE);
     ipText.setFillColor(sf::Color::Black);
-    ipText.setPosition(400, 50);
+    ipText.setPosition(INIT_IP_TEXT_X_POS, INIT_IP_TEXT_Y_POS);
 
     portText.setFont(font);
-    portText.setCharacterSize(50);
+    portText.setCharacterSize(CHAR_SIZE);
     portText.setFillColor(sf::Color::Black);
-    portText.setPosition(400, 150);
+    portText.setPosition(INIT_PORT_TEXT_X_POS, INIT_PORT_TEXT_Y_POS);
 
     Button joinConfButton("Join");
-    joinConfButton.chPos(525, 300);
+    joinConfButton.chPos(INIT_JOIN_CONF_BTN_X_POS, INIT_JOIN_CONF_BTN_Y_POS);
 
-    bgMenu.loadFromFile("img/mainbg.jpg");
+    if (!bgMenu.loadFromFile("img/mainbg.jpg")) {
+        std::cerr << "Error: Failed to load background image" << std::endl;
+    }
+
     bg.setTexture(bgMenu);
 
     sf::RectangleShape ipInputBox(sf::Vector2f(400, 60));
 
     ipInputBox.setFillColor(sf::Color::White);
-    ipInputBox.setOutlineThickness(5);
+    ipInputBox.setOutlineThickness(INIT_IP_BOX_OUTLINE_THICKNESS);
     ipInputBox.setOutlineColor(sf::Color::Black);
-    ipInputBox.setPosition(395, 50);
+    ipInputBox.setPosition(INIT_IP_BOX_X_POS, INIT_IP_BOX_Y_POS);
 
     sf::RectangleShape portInputBox(sf::Vector2f(400, 60));
 
     portInputBox.setFillColor(sf::Color::White);
-    portInputBox.setOutlineThickness(5);
+    portInputBox.setOutlineThickness(INIT_PORT_BOX_OUTLINE_THICKNESS);
     portInputBox.setOutlineColor(sf::Color::Black);
-    portInputBox.setPosition(395, 150);
+    portInputBox.setPosition(INIT_PORT_BOX_X_POS, INIT_PORT_BOX_Y_POS);
 
     unsigned int boxSelected = 0;
     sf::IpAddress joinIp;
@@ -111,19 +126,16 @@ void Game::joinMenu() {
                         boxSelected = 1;
                         portInputBox.setFillColor(sf::Color::White);
                         ipInputBox.setFillColor(sf::Color(120, 120, 120, 255));
-                        std::cout << "\n IP box selected!";
                     }
                     else if (portInputBox.getGlobalBounds().contains(mouse)) {
                         boxSelected = 2;
                         ipInputBox.setFillColor(sf::Color::White);
                         portInputBox.setFillColor(sf::Color(120, 120, 120, 255));
-                        std::cout << "\n Port box selected!";
                     }
                     else {
                         boxSelected = 0;
                         ipInputBox.setFillColor(sf::Color::White);
                         portInputBox.setFillColor(sf::Color::White);
-                        std::cout << "\n Box selection cleared!";
                     }
 
                     if (joinConfButton.isClicked(mouse)) {
@@ -133,39 +145,24 @@ void Game::joinMenu() {
                         network.setReceiverIp(ipText.getString());
                         bool starting = chooseStartingPlayer();
                         player.setTurn(starting);
-                        network.connect(!starting);
+                        network.connect(!starting, history_file_name);
                     }
-
                 }
             }
 
-            else if (event.type == sf::Event::TextEntered)
-            {
-                switch (boxSelected) {
-                case 0:
-                    std::cout << "\n None box selected!";
-                    break;
-
+            else if (event.type == sf::Event::TextEntered) {
+                switch (boxSelected)
+                {
                 case 1:
-                    if (ipInput.getSize() >= 15 && event.text.unicode != 8) {
-                        std::cout << "\n IP: Input box is full!";
-                    }
-                    else {
-                        std::cout << "\n IP: Entered: " << event.text.unicode;
-
+                    if (!(ipInput.getSize() >= 15 && event.text.unicode != 8)) {
                         if (event.text.unicode == 8) {
                             if (!ipInput.isEmpty()) {
                                 ipInput.erase(ipInput.getSize() - 1, 1);
                                 ipText.setString(ipInput);
                             }
-                            else
-                            {
-                                std::cout << "\n IP: Text field value is empty!";
-                            }
                         }
                         else {
                             if ((event.text.unicode < 48 || event.text.unicode > 57) && event.text.unicode != 46) {
-                                std::cout << "\n IP: Input not a number or dot!";
                                 break;
                             }
                             ipInput += event.text.unicode;
@@ -176,24 +173,17 @@ void Game::joinMenu() {
                     break;
                 case 2:
                     if (portInput.getSize() >= 5 && event.text.unicode != 8) {
-                        std::cout << "\n Port: Input box is full!";
                         break;
                     }
-                    std::cout << "\n Port: Entered: " << event.text.unicode;
 
                     if (event.text.unicode == 8) {
                         if (!portInput.isEmpty()) {
                             portInput.erase(portInput.getSize() - 1, 1);
                             portText.setString(portInput);
                         }
-                        else
-                        {
-                            std::cout << "\n Port: Text field value is empty!";
-                        }
                     }
                     else {
                         if (event.text.unicode < 48 || event.text.unicode > 57) {
-                            std::cout << "\n Port: Input not a number!";
                             break;
                         }
                         portInput += event.text.unicode;
@@ -221,28 +211,31 @@ void Game::hostMenu() {
     bg.setTexture(bgMenu);
 
     sf::IpAddress hostIp;
-    std::cout << "\n Checking your IP address...";
-    std::cout << "\n Hosting game at IP address: " << hostIp.getLocalAddress();
 
-    std::cout << "\n Checking your port number...";
-    std::cout << "\n Hosting game at port number: " << network.getPort();
+    History::addTextToFile(
+        "Hosting game at IP address: " + History::to_string(hostIp.getLocalAddress()) + "\n" +
+        "Hosting game at port number: " + History::to_string(hostIp.getLocalAddress()) + "\n\n",
+        history_file_name
+    );
 
-    sf::Text ipTextH;
-    sf::Text portTextH;
-    if (!font.loadFromFile("fonts/arial.ttf"))
-    {
+    sf::Text ipText;
+    sf::Text portText;
+
+    if (!font.loadFromFile("fonts/arial.ttf")) {
+        std::cerr << "Failed to load text font" << std::endl;
     }
-    ipTextH.setFont(font);
-    ipTextH.setCharacterSize(50);
-    ipTextH.setFillColor(sf::Color::Black);
-    ipTextH.setPosition(400, 50);
-    ipTextH.setString(hostIp.getLocalAddress().toString());
 
-    portTextH.setFont(font);
-    portTextH.setCharacterSize(50);
-    portTextH.setFillColor(sf::Color::Black);
-    portTextH.setPosition(450, 150);
-    portTextH.setString(std::to_string(network.getPort()));
+    ipText.setFont(font);
+    ipText.setCharacterSize(CHAR_SIZE);
+    ipText.setFillColor(sf::Color::Black);
+    ipText.setPosition(INIT_IP_TEXT_X_POS, INIT_IP_TEXT_Y_POS);
+    ipText.setString(hostIp.getLocalAddress().toString());
+
+    portText.setFont(font);
+    portText.setCharacterSize(CHAR_SIZE);
+    portText.setFillColor(sf::Color::Black);
+    portText.setPosition(INIT_PORT_TEXT_X_POS, INIT_PORT_TEXT_Y_POS);
+    portText.setString(std::to_string(network.getPort()));
 
     while (window.isOpen())
     {
@@ -251,7 +244,6 @@ void Game::hostMenu() {
             bool isStarting;
             result.packet >> isStarting;
             player.setTurn(isStarting);
-            std::cout << "successfully connected " << isStarting << std::endl;
             network.reply(!isStarting);
             window.close();
             run();
@@ -264,53 +256,43 @@ void Game::hostMenu() {
         }
         window.clear(sf::Color::White);
         window.draw(bg);
-        window.draw(ipTextH);
-        window.draw(portTextH);
+        window.draw(ipText);
+        window.draw(portText);
         window.display();
     }
 }
 
 void Game::run() {
-    std::cout << "\n Game starting...";
+    History::addTextToFile("Successfully connected. Game is starting.\n", history_file_name);
 
     srand(time(NULL));
-    std::cout << "\n Loading fonts...";
-    if (!font.loadFromFile("fonts/arial.ttf"))
-    {
+
+    if (!font.loadFromFile("fonts/arial.ttf")) {
+        std::cerr << "Failed to load text font" << std::endl;
     }
+
     text.setFont(font);
     text.setCharacterSize(150);
+
     playerTurnText.setFont(font);
     playerTurnText.setCharacterSize(50);
-    sf::FloatRect turnTextRect = text.getLocalBounds();
-
     playerTurnText.setPosition(450, 700);
 
+    sf::FloatRect turnTextRect = text.getLocalBounds();
     sf::FloatRect textRect = text.getLocalBounds();
-    text.setOrigin(textRect.left + textRect.width / 2.0f,
-        textRect.top + textRect.height / 2.0f);
+    text.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
     text.setPosition(sf::Vector2f(width / 2.0f, height / 2.0f));
 
-    std::cout << "\n Creating ships...";
     short int shipTilesCount;
     shipTilesCount = createShips();
 
     player.setTilesCount(shipTilesCount);
     Player enemy(shipTilesCount);
-    std::cout << "\n Choosing side... ";
-
     Button startButton("START");
-    std::cout << "\n Rendering game window...";
-
     sf::RenderWindow window(sf::VideoMode(width, height), "statki");
-
-    std::cout << "\n Creating player grid...";
     GridPlayer playerGrid(gridWidth, posX, posY);
-
-    std::cout << "\n Creating enemy grid...";
     GridEnemy enemyGrid(gridWidth, posX + gridWidth + 3 * tileWidth, posY);
 
-    std::cout << "\n Loading finished!";
     while (window.isOpen())
     {
         auto result = network.listen();
@@ -346,11 +328,11 @@ void Game::run() {
                             }
                         }
                         updateShips(playerGrid);
-                        checkShips(playerGrid);
                     }
                     else {
-                        if (player.isPlayerTurn())
-                            enemyGrid.shoot(mouse, network, enemy, player);
+                        if (player) {
+                            enemyGrid.shoot(mouse, network, enemy, player, playerGrid, history_file_name);
+                        }
                     }
                 }
                 else if (event.mouseButton.button == sf::Mouse::Right) {
@@ -363,14 +345,33 @@ void Game::run() {
         }
 
         window.clear(sf::Color::White);
-        checkWin(player, enemy, window);
+
+        int is_win = checkWin(player, enemy, window);
+        if (is_win == 1) {
+            History::addTextToFile(
+                "Player won a game.\n",
+                history_file_name
+            );
+            printState(playerGrid, history_file_name);
+        }
+        else if (is_win == 2) {
+            History::addTextToFile(
+                "Player lost a game.\n",
+                history_file_name
+            );
+            printState(playerGrid, history_file_name);
+        }
+
         playerGrid.drawGrid(window);
         enemyGrid.drawGrid(window);
-        for (Ship ship : ships)
+
+        for (Ship<Tile> ship : ships) {
             ship.drawShip(window);
+        }
+
         window.draw(text);
         window.draw(startButton);
-        displayTurnText(window, player.isPlayerTurn());
+        displayTurnText(window, player);
         window.display();
     }
 }
@@ -392,7 +393,7 @@ short int Game::createShips() {
     int n = 4;
     for (int i = 1; i <= 4; i++) {
         for (int j = 0; j < n; j++) {
-            Ship ship(i, posX + tileWidth * (i + 1) * j, posY + gridWidth + tileWidth * i + tileWidth * (i - 1) / 2);
+            Ship<Tile> ship(i, posX + tileWidth * (i + 1) * j, posY + gridWidth + tileWidth * i + tileWidth * (i - 1) / 2);
             ships.push_back(ship);
             shipTilesCount += i;
         }
@@ -402,12 +403,9 @@ short int Game::createShips() {
 }
 
 bool Game::allShipsPlaced() {
-    for (int i = 0; i < ships.size(); i++) {
-        if (!ships[i].checkPlacedState()) {
-            return false;
-        }
-    }
-    return true;
+    return std::all_of(ships.begin(), ships.end(), [](const auto& ship) {
+        return ship.checkPlacedState();
+    });
 }
 
 int Game::shipSel(sf::Vector2f mouse) {
@@ -486,7 +484,7 @@ bool Game::shipMove(sf::Vector2f mouse, int selShip, GridPlayer playerGrid) {
     }
 }
 
-bool Game::shipRotate(Ship ship, GridPlayer playerGrid) {
+bool Game::shipRotate(Ship<Tile> ship, GridPlayer playerGrid) {
     if (playerGrid.canBeRotated(ship) == 0) {
         return ship.chRot();
     }
@@ -527,36 +525,44 @@ void Game::updateShips(GridPlayer playerGrid) {
     }
 }
 
-void Game::checkShips(GridPlayer playerGrid) {
-    //DEV method. NOT FOR COMMERCIAL USE!
-    std::cout << "------------------------------------" << std::endl;
+void Game::printState(GridPlayer playerGrid, std::string history_file_name) {
+    std::string horizontalLine = "";
+    for (int i=0; i < (10 * 2 - 1); ++i) {
+        horizontalLine += "-";
+    }
+    History::addTextToFile(horizontalLine + "\n", history_file_name);
+
+    std::string line = "";
     for (int i = 0; i < playerGrid.getRows(); i++) {
+        line = "";
         for (int j = 0; j < playerGrid.getCols(); j++) {
             if (playerGrid.getTiles()[j][i].checkShipContent() == true) {
-                std::cout << "X ";
+                line += "X ";
             }
-            else
-            {
-                std::cout << "O ";
+            else {
+                line += "O ";
             }
         }
-        std::cout << std::endl;
+        History::addTextToFile(line + "\n", history_file_name);
     }
-    std::cout << "------------------------------------" << std::endl;
+
+    History::addTextToFile(horizontalLine + "\n\n", history_file_name);
 }
 
-void Game::checkWin(Player& player, Player& enemy, sf::RenderWindow& window) {
+int Game::checkWin(Player& player, Player& enemy, sf::RenderWindow& window) {
     if (player.getTilesCount() == 0) {
         text.setString("lost");
         text.setFillColor(sf::Color::Red);
+        return 2;
     }
     else if (enemy.getTilesCount() == 0) {
         text.setString("won");
         text.setFillColor(sf::Color::Green);
+        return 1;
     }
+    return 0;
 }
 
 bool Game::chooseStartingPlayer() {
     return (rand() > (RAND_MAX / 2));
 }
-

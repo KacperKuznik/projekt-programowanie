@@ -9,11 +9,15 @@
 #include "GridEnemy.hpp"
 #include "Player.hpp"
 #include "Button.hpp"
+#include "History.hpp"
 #include <vector>
 #include <iostream>
 #include <string>
 #include <cmath>
 #include <sstream>
+#include <fstream>
+#include <filesystem>
+#include <regex>
 
 class Game
 {
@@ -44,11 +48,38 @@ private:
     sf::String ipInput;
     sf::String portInput;
 
-    std::vector< Ship > ships;
+    std::vector<Ship<Tile>> ships;
     Player player;
 
     bool started = false;
+
+    std::string history_file_name;
+
+    enum paarameters {
+        INIT_HOST_BTN_X_POS = 525,
+        INIT_HOST_BTN_Y_POS = 200,
+        INIT_JOIN_BTN_X_POS = 525,
+        INIT_JOIN_BTN_Y_POS = 350,
+
+        CHAR_SIZE = 50,
+
+        INIT_IP_TEXT_X_POS = 400,
+        INIT_IP_TEXT_Y_POS = 50,
+        INIT_PORT_TEXT_X_POS = 400,
+        INIT_PORT_TEXT_Y_POS = 150,
+        INIT_JOIN_CONF_BTN_X_POS = 525,
+        INIT_JOIN_CONF_BTN_Y_POS = 300,
+
+        INIT_IP_BOX_X_POS = 395,
+        INIT_IP_BOX_Y_POS = 50,
+        INIT_IP_BOX_OUTLINE_THICKNESS = 5,
+
+        INIT_PORT_BOX_X_POS = 395,
+        INIT_PORT_BOX_Y_POS = 150,
+        INIT_PORT_BOX_OUTLINE_THICKNESS = 5
+    };
 public:
+    Game();
     void startMenu();
     void joinMenu();
     void hostMenu();
@@ -58,9 +89,9 @@ public:
     bool allShipsPlaced();
     int shipSel(sf::Vector2f mouse);
     bool shipMove(sf::Vector2f mouse, int selShip, GridPlayer playerGrid);
-    bool shipRotate(Ship ship, GridPlayer playerGrid);
+    bool shipRotate(Ship<Tile> ship, GridPlayer playerGrid);
     void updateShips(GridPlayer playerGrid);
-    void checkShips(GridPlayer playerGrid);
-    void checkWin(Player& player, Player& enemy, sf::RenderWindow& window);
+    int checkWin(Player& player, Player& enemy, sf::RenderWindow& window);
     bool chooseStartingPlayer();
+    static void printState(GridPlayer playerGrid, std::string history_file_name);
 };

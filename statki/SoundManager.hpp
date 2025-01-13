@@ -12,6 +12,7 @@ private:
     sf::Sound clickSound;
 public:
     SoundManager();
+    ~SoundManager();
     void shoot();
     void click();
 };

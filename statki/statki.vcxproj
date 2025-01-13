@@ -24,10 +24,10 @@
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="GridEnemy.cpp" />
     <ClCompile Include="GridPlayer.cpp" />
-    <ClCompile Include="main_old.cpp" />
+    <ClCompile Include="History.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="Network.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Ship.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="Tile.cpp" />
   </ItemGroup>
@@ -37,6 +37,7 @@
     <ClInclude Include="Grid.hpp" />
     <ClInclude Include="GridEnemy.hpp" />
     <ClInclude Include="GridPlayer.hpp" />
+    <ClInclude Include="History.hpp" />
     <ClInclude Include="Network.hpp" />
     <ClInclude Include="Player.hpp" />
     <ClInclude Include="Ship.hpp" />
@@ -102,6 +103,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -136,6 +138,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

@@ -30,3 +30,7 @@ void Player::setTurn(bool playerTurn) {
 bool Player::isPlayerTurn() {
     return playerTurn;
 }
+
+Player::operator bool() {
+    return isPlayerTurn();
+}

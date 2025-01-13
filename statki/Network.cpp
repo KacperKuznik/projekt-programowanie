@@ -5,10 +5,11 @@ Network::Network()
     if (socket.bind(sf::Socket::AnyPort) != sf::Socket::Done) {
         std::cerr << "Error: Failed to bind socket to any port." << std::endl;
     }
-    else {
-        std::cout << "created socket at port: " << socket.getLocalPort() << std::endl;
-    }
     socket.setBlocking(false);
+}
+
+Network::~Network() {
+    socket.unbind();
 }
 
 Network::Result Network::listen() {
@@ -38,8 +39,12 @@ void Network::send(int row, int col) {
     socket.send(packet, receiverIp, receiverPort);
 }
 
-void Network::connect(bool isStarting) {
-    std::cout << "\nConnecting with " << receiverIp << "on port " << receiverPort;
+void Network::connect(bool isStarting, std::string history_file_name) {
+    History::addTextToFile(
+        "Connecting game at IP address: " + History::to_string(receiverIp) + "\n" +
+        "Connecting game at port number: " + History::to_string(receiverPort) + "\n\n",
+        history_file_name
+    );
     packet.clear();
     packet << isStarting;
     socket.send(packet, receiverIp, receiverPort);

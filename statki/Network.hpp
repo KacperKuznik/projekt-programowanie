@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Network.hpp>
+#include "History.hpp"
 #include <iostream>
 
 class Network {
@@ -18,11 +19,12 @@ public:
         sf::Packet packet;
     };
     Network();
+    ~Network();
     Result listen();
     void setReceiverPort(unsigned short receiverPort);
     void setReceiverIp(sf::String receiverIp);
     void send(int row, int col);
-    void connect(bool isStarting);
+    void connect(bool isStarting, std::string history_file_name);
     void reply(bool isHit);
     unsigned short getPort();
 };

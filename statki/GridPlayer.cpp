@@ -1,6 +1,6 @@
 #include "GridPlayer.hpp"
 
-void GridPlayer::mark(int row, int col, std::vector<Ship> ships, Network& network, Player& player) {
+void GridPlayer::mark(int row, int col, std::vector<Ship<Tile>> ships, Network& network, Player& player) {
     for (int i = 0; i < ships.size(); i++) {
         for (int j = 0; j < ships[i].size(); j++) {
             if (isHit(row, col, ships[i].getTile(j))) {
@@ -16,7 +16,7 @@ void GridPlayer::mark(int row, int col, std::vector<Ship> ships, Network& networ
     player.changeTurn();
 }
 
-void GridPlayer::placeShip(Ship& ship, sf::Vector2f mouse) {
+void GridPlayer::placeShip(Ship<Tile>& ship, sf::Vector2f mouse) {
     auto pos = getClickedPosition(mouse);
     if (pos.row >= 0 && pos.col >= 0) {
         if (ship.getRot() == 0) {
@@ -51,7 +51,7 @@ bool GridPlayer::isHit(int row, int col, Tile tile) {
     return false;
 }
 
-bool GridPlayer::canBeRotated(Ship ship) {
+bool GridPlayer::canBeRotated(Ship<Tile> ship) {
     auto pos = getClickedPosition(ship.getTile(0).getCenter());
     int size = ship.size();
     bool rotation = ship.getRot();
